@@ -1,14 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class CreatePatient extends StatefulWidget {
-  CreatePatient({super.key});
+class CreatePatientPage extends StatefulWidget {
+  CreatePatientPage({super.key});
 
   @override
-  State<CreatePatient> createState() => _CreatePatient();
+  State<CreatePatientPage> createState() => _CreatePatientPage();
 }
 
-class _CreatePatient extends State<CreatePatient> {
+class _CreatePatientPage extends State<CreatePatientPage> {
 
   TextEditingController usernameController = TextEditingController();
   TextEditingController firstnameController = TextEditingController();

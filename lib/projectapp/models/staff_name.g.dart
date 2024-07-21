@@ -1,23 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'staff.dart';
+part of 'staff_name.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Staff _$StaffFromJson(Map<String, dynamic> json) => Staff(
-      id: (json['id'] as num).toInt(),
-      username: json['username'] as String,
+StaffName _$StaffNameFromJson(Map<String, dynamic> json) => StaffName(
       firstname: json['firstname'] as String,
       lastname: json['lastname'] as String,
-      is_admin: (json['is_admin'] as num).toInt(),
     );
 
-Map<String, dynamic> _$StaffToJson(Staff instance) => <String, dynamic>{
-      'id': instance.id,
-      'username': instance.username,
+Map<String, dynamic> _$StaffNameToJson(StaffName instance) => <String, dynamic>{
       'firstname': instance.firstname,
       'lastname': instance.lastname,
-      'is_admin': instance.is_admin,
     };

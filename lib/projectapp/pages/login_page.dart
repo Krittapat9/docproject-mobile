@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:code/projectapp/models/staff_name.dart';
 import 'package:code/projectapp/pages/home_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,8 +15,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPage extends State<LoginPage> {
+
+
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
 
   Future<void> _login() async {
     try {
@@ -28,14 +32,14 @@ class _LoginPage extends State<LoginPage> {
         },
       );
       if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.data);
+        final responseData = response.data;
         if (responseData['success'] == true) {
           Fluttertoast.showToast(
             msg: 'เข้าสู่ระบบสำเร็จ',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
           );
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => HomePage(),
@@ -51,15 +55,15 @@ class _LoginPage extends State<LoginPage> {
         }
       } else {
         Fluttertoast.showToast(
-          msg: 'Sever Error:${response.statusCode}',
+          msg: 'Server Error: ${response.statusCode}',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
         );
       }
     } catch (e) {
-      print('Error:$e');
+      print('Error: $e');
       Fluttertoast.showToast(
-        msg: "An error occurred.Please try again",
+        msg: "An error occurred. Please try again",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
       );
@@ -71,14 +75,14 @@ class _LoginPage extends State<LoginPage> {
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding:EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.15,
-              child:const Text(
-                'DOCNOTE',
+              child: Text(
+                'LOGIN',
                 style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
               ),
             ),
@@ -86,31 +90,31 @@ class _LoginPage extends State<LoginPage> {
               controller: usernameController,
               decoration: InputDecoration(
                   labelText: 'username',
-                  prefixIcon: const Icon(Icons.person),
+                  prefixIcon: Icon(Icons.person),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0))),
             ),
-            const SizedBox(
+            SizedBox(
               height: 20.0,
             ),
             TextField(
               controller: passwordController,
               decoration: InputDecoration(
-                  labelText: 'password',
-                  prefixIcon: const Icon(Icons.lock),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                  ),
+                labelText: 'password',
+                prefixIcon: Icon(Icons.lock),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
               ),
             ),
-            const SizedBox(
+            SizedBox(
               height: 20.0,
             ),
             ElevatedButton(
               onPressed: _login,
-              child: const Text('Login'),
+              child: Text('Login'),
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50.0),
+                minimumSize: Size(double.infinity, 50.0),
               ),
             )
           ],

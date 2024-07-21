@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,6 +9,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _Homepage extends State<HomePage> {
+  void loadData() async {
+    final dio = Dio();
+    final response = await dio.get("http://10.0.2.2:3000/staff");
+    print(response.data);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
