@@ -10,7 +10,7 @@ Stoma _$StomaFromJson(Map<String, dynamic> json) => Stoma(
       id: (json['id'] as num).toInt(),
       surgery_id: (json['surgery_id'] as num).toInt(),
       surgery_type_id: (json['surgery_type_id'] as num).toInt(),
-      stoma_type_note_other: json['stoma_type_note_other'] as String,
+      stoma_type_note_other: json['stoma_type_note_other'] as String?,
     );
 
 Map<String, dynamic> _$StomaToJson(Stoma instance) => <String, dynamic>{

@@ -13,6 +13,7 @@ class Patient {
   final String date_of_birth;
   final String hospital_number;
   final DateTime date_of_registration;
+  final String? email;
 
   Patient({
     required this.id,
@@ -23,6 +24,7 @@ class Patient {
     required this.date_of_birth,
     required this.hospital_number,
     required this.date_of_registration,
+    required this.email,
   });
 
 

@@ -7,7 +7,7 @@ class Stoma {
   final int id;
   final int surgery_id;
   final int surgery_type_id;
-  final String stoma_type_note_other;
+  final String? stoma_type_note_other;
 
 
   Stoma({required this.id,

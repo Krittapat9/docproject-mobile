@@ -1,11 +1,15 @@
 import 'dart:convert';
 import 'dart:ui';
-import 'package:code/projectapp/models/staff_name.dart';
+import 'package:code/projectapp/models/staff.dart';
 import 'package:code/projectapp/pages/home_page.dart';
+import 'package:code/projectapp/pages/start_page.dart';
+import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import '../models/login.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,11 +19,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPage extends State<LoginPage> {
-
-
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
+  bool _obscureText = true;
 
   Future<void> _login() async {
     try {
@@ -31,35 +33,44 @@ class _LoginPage extends State<LoginPage> {
           'password': passwordController.text,
         },
       );
-      if (response.statusCode == 200) {
-        final responseData = response.data;
-        if (responseData['success'] == true) {
-          Fluttertoast.showToast(
-            msg: 'เข้าสู่ระบบสำเร็จ',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-          );
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ),
-          );
-        } else {
-          String errorMessage = responseData['message'] ?? 'Login failed';
-          Fluttertoast.showToast(
-            msg: errorMessage,
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-          );
-        }
-      } else {
+
+      final loginData = Login.fromJson(response.data);
+      Auth.currentUser = loginData.staff as Staff?;
+
+      print('response.statusCode: ${response.statusCode}');
+      print('response.data: ${response.data}');
+
+      //fail
+      if (response.statusCode != 200) {
         Fluttertoast.showToast(
           msg: 'Server Error: ${response.statusCode}',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
         );
+        return;
       }
+
+      if (loginData.status != 'success') {
+        String errorMessage = loginData.message ?? 'Login failed';
+        Fluttertoast.showToast(
+          msg: errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+        );
+        return;
+      }
+      // success
+      Fluttertoast.showToast(
+        msg: 'Login successful',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
     } catch (e) {
       print('Error: $e');
       Fluttertoast.showToast(
@@ -74,50 +85,91 @@ class _LoginPage extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-      child: SingleChildScrollView(
-        padding:EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-              child: Text(
-                'LOGIN',
-                style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
-              ),
-            ),
-            TextField(
-              controller: usernameController,
-              decoration: InputDecoration(
-                  labelText: 'username',
-                  prefixIcon: Icon(Icons.person),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0))),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(
-                labelText: 'password',
-                prefixIcon: Icon(Icons.lock),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+      child: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(30.0),
+                child: Text(
+                  'LOGIN STAFF',
+                  style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w900),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            ElevatedButton(
-              onPressed: _login,
-              child: Text('Login'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50.0),
+              TextField(
+                controller: usernameController,
+                decoration: InputDecoration(
+                    labelText: 'username',
+                    prefixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0))),
               ),
-            )
-          ],
+              SizedBox(
+                height: 20.0,
+              ),
+              TextField(
+                controller: passwordController,
+                obscureText: _obscureText,
+                decoration: InputDecoration(
+                  labelText: 'password',
+                  prefixIcon: Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                        _obscureText ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: _login,
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 50.0),
+                      backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => StartPage()));
+                    },
+                    child: Text(
+                      'Back',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 50.0),
+                      backgroundColor: Colors.red,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     ));

@@ -16,6 +16,7 @@ Patient _$PatientFromJson(Map<String, dynamic> json) => Patient(
       hospital_number: json['hospital_number'] as String,
       date_of_registration:
           DateTime.parse(json['date_of_registration'] as String),
+      email: json['email'] as String?,
     );
 
 Map<String, dynamic> _$PatientToJson(Patient instance) => <String, dynamic>{
@@ -27,4 +28,5 @@ Map<String, dynamic> _$PatientToJson(Patient instance) => <String, dynamic>{
       'date_of_birth': instance.date_of_birth,
       'hospital_number': instance.hospital_number,
       'date_of_registration': instance.date_of_registration.toIso8601String(),
+      'email': instance.email,
     };
