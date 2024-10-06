@@ -32,6 +32,8 @@ MedicalHistory _$MedicalHistoryFromJson(Map<String, dynamic> json) =>
           json['stoma_characteristics_note_other'] as String?,
       stoma_shape_id: (json['stoma_shape_id'] as num).toInt(),
       stoma_shape_name: json['stoma_shape_name'] as String,
+      stoma_protrusion_id: (json['stoma_protrusion_id'] as num).toInt(),
+      stoma_protrusion_name: json['stoma_protrusion_name'] as String,
       peristomal_skin_id: (json['peristomal_skin_id'] as num).toInt(),
       peristomal_skin_name: json['peristomal_skin_name'] as String,
       mucocutaneous_suture_line_id:
@@ -71,6 +73,8 @@ Map<String, dynamic> _$MedicalHistoryToJson(MedicalHistory instance) =>
           instance.stoma_characteristics_note_other,
       'stoma_shape_id': instance.stoma_shape_id,
       'stoma_shape_name': instance.stoma_shape_name,
+      'stoma_protrusion_id': instance.stoma_protrusion_id,
+      'stoma_protrusion_name': instance.stoma_protrusion_name,
       'peristomal_skin_id': instance.peristomal_skin_id,
       'peristomal_skin_name': instance.peristomal_skin_name,
       'mucocutaneous_suture_line_id': instance.mucocutaneous_suture_line_id,

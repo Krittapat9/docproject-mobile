@@ -1,6 +1,5 @@
 import 'package:code/projectapp/models/patient.dart';
 import 'package:code/projectapp/pages/patient/patient_info_page.dart';
-import 'package:code/projectapp/pages/patient/patient_list_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -21,50 +20,79 @@ class _PatientCreatePage extends State<PatientCreatePage> {
   TextEditingController emailController = TextEditingController();
 
   void clearForm() {
-    firstnameController.text = '';
-    lastnameController.text = '';
-    sexController.text = '';
-    dateOfBirthController.text = '';
-    hospitalNumberController.text = '';
-    emailController.text = '';
+    firstnameController.clear();
+    lastnameController.clear();
+    sexController.clear();
+    dateOfBirthController.clear();
+    hospitalNumberController.clear();
+    emailController.clear();
+  }
+
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
+    return emailRegex.hasMatch(email);
   }
 
   Future<void> _createPatient() async {
     final dio = Dio();
-    final response = await dio.post(
-      "http://10.0.2.2:3000/patient",
-      data: {
-        'staff_id': Auth.currentUser?.id,
-        'firstname': firstnameController.text,
-        'lastname': lastnameController.text,
-        'sex': sexController.text,
-        'date_of_birth': dateOfBirthController.text,
-        'hospital_number': hospitalNumberController.text,
-        'email' : emailController.text
-      },
-    );
-    if (response.statusCode == 200) {
-      Patient patient = Patient.fromJson(response.data);
+    String email = emailController.text;
 
-      print('Patient created successfully!');
+    if (!isValidEmail(email)) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Patient created successfully!'),
+        content: Text('Please enter a valid email format.'),
       ));
-      clearForm();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PatientListPage(),
-        ),
+      return; // ถ้า email format ไม่ถูกต้อง หยุดการทำงาน
+    }
+
+    try {
+      final response = await dio.post(
+        "http://10.0.2.2:3000/patient",
+        data: {
+          'staff_id': Auth.currentUser?.id,
+          'firstname': firstnameController.text,
+          'lastname': lastnameController.text,
+          'sex': sexController.text,
+          'date_of_birth': dateOfBirthController.text,
+          'hospital_number': hospitalNumberController.text,
+          'date_of_registration': DateTime.now().toIso8601String(),
+          'email': emailController.text,
+        },
       );
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PatientInfoPage(patientId: patient.id),
-        ),
-      );
+      if (response.statusCode == 200) {
+        Patient patient = Patient.fromJson(response.data);
+        print('Patient created successfully!');
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Patient created successfully!'),
+        ));
+        clearForm();
+        Navigator.pushReplacement(context,
+          MaterialPageRoute(
+            builder: (context) => PatientInfoPage(patientId: patient.id),
+          ),
+        );
+      } else {
+        _handleErrorResponse(response);
+        print('Error creating patient: ${response.data}');
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('this email already used'),
+      ));
+      print('Exception: $e');
+    }
+  }
+
+  void _handleErrorResponse(Response response) {
+    if (response.data is Map<String, dynamic>) {
+      String errorMessage =
+          response.data['error'] ?? 'An unknown error occurred.';
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(errorMessage),
+      ));
     } else {
-      print('Error creating patient: ${response.data}');
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('An unknown error occurred.'),
+      ));
     }
   }
 

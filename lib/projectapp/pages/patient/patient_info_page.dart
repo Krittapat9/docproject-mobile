@@ -79,14 +79,13 @@ class _PatientInfoPage extends State<PatientInfoPage> {
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Delete'),
-          content: Text(
-              'Your file is saved.'),
+          content: Text('Your file is saved.'),
           actions: <Widget>[
             ElevatedButton(
-              onPressed: () async{
+              onPressed: () async {
                 final dio = Dio();
-                final response =
-                    await dio.delete("http://10.0.2.2:3000/surgery/${surgeryId}");
+                final response = await dio
+                    .delete("http://10.0.2.2:3000/surgery/${surgeryId}");
 
                 log('data:${response.data}');
                 log('response.statusCode=${response.statusCode}');
@@ -110,7 +109,6 @@ class _PatientInfoPage extends State<PatientInfoPage> {
           ],
         ),
       );
-
     } on Exception catch (e) {
       log(e.toString());
     }
@@ -445,7 +443,11 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => PatientEditPage(
-                                              patientId: patient!.id)));
+                                              patientId: patient!.id))).then((val) {
+                                    setState(() {
+                                      print('return 2');
+                                    });
+                                  });
                                 },
                                 icon: Icon(
                                   Icons.edit,
@@ -461,7 +463,7 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                         _InfoRow('วันเดือนปีเกิด', '${patient?.date_of_birth}'),
                         _InfoRow(
                             'หมายเลขโรงพยาบาล', '${patient?.hospital_number}'),
-                        _InfoRow('วันเวลาลงทะเบียน',
+                        _InfoRow('email',
                             patient?.email?.toString() ?? '-'),
                         _InfoRow('ผู้ลงทะเบียน',
                             patient?.staff_id?.toString() ?? '-'),
@@ -527,25 +529,39 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () async {
-                        await showDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (BuildContext context) {
-                              return ScheduleCreateModal(
-                                patientId: widget.patientId,
-                              );
-                            }).then((val) {
-                          setState(() {
-                            print('return 2');
+                  SizedBox(height: 8,),
+                  Container(
+                    height: 40,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          await showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (BuildContext context) {
+                                return ScheduleCreateModal(
+                                  patientId: widget.patientId,
+                                );
+                              }).then((val) {
+                            setState(() {
+                              print('return 2');
+                            });
                           });
-                        });
-                        setState(() {
-                          print('return 1');
-                        });
-                      },
-                      child: Text('นัดหมาย')),
+                          setState(() {
+                            print('return 1');
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          side: BorderSide(color: Colors.black),
+                        ),
+                        child: Text(
+                          'นัดหมาย',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        )),
+                  ),
                   SizedBox(
                     height: 13.0,
                   ),

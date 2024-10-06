@@ -852,38 +852,93 @@ class _MedicalHistoryCreatePage extends State<MedicalHistoryCreatePage> {
                     //   ],
                     // ),
                     SizedBox(
-                      height: 10,
+                      height: 25,
                     ),
                     Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('Medicine',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16)),
+                        Text(
+                          'Medicine',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
-                        DropdownButton(
-                          value: medicineId,
-                          items: [
-                            DropdownMenuItem(
-                              value: 0,
-                              child: Text(
-                                'Please Select',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 16),
+                        SizedBox(
+                          width: 23,
+                        ),
+                        Container(
+                          child: ElevatedButton(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    medicine.name.isEmpty
+                                        ? "Please Select"
+                                        : '${medicine.name}\nDetail: ${medicine.details}',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Icon(
+                                    Icons.add,
+                                    size: 30,
+                                    color: Color.fromRGBO(62, 28, 162, 1.0),
+                                  )
+                                ],
                               ),
                             ),
-                            ...medicineList
-                                .map((e) => DropdownMenuItem(
-                                    value: e.id, child: Text(e.name)))
-                                .toList(),
-                          ],
-                          onChanged: (val) {
-                            print('medicine:$val');
-                            setState(() {
-                              medicineId = val!;
-                            });
-                          },
+                            onPressed: () {
+                              SelectDialog.showModal<Medicine>(
+                                context,
+                                backgroundColor: Colors.grey[50],
+                                showSearchBox: true,
+                                onFind: (find) async => await medicineList
+                                    .where((e) => e.name
+                                    .toLowerCase()
+                                    .contains(find.toLowerCase()))
+                                    .toList(),
+                                selectedValue: medicine,
+                                itemBuilder: ((context, item, selected) {
+                                  return Column(
+                                    children: [
+                                      ListTile(
+                                        title: Text(
+                                          item.name,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        subtitle: Text(
+                                          'Detail: ${item.details}',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ),
+                                      Divider(
+                                        color: Colors.black,
+                                        endIndent: 0,
+                                      ),
+                                    ],
+                                  );
+                                }),
+                                items: medicineList,
+                                onChange: (Medicine selected) {
+                                  setState(() {
+                                    medicine = selected;
+                                    medicineId = selected.id;
+                                  });
+                                },
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              side: BorderSide(color: Colors.black),
+                            ),
+                          ),
                         ),
                       ],
                     ),

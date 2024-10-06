@@ -68,12 +68,7 @@ class _PatientEditPage extends State<PatientEditPage> {
       //   content: Text('Patient created successfully!'),
       // ));
       clearForm();
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PatientInfoPage(patientId: patient!.id),
-        ),
-      );
+      Navigator.of(context).pop();
     } else {
       print('Error creating patient: ${response.data}');
     }

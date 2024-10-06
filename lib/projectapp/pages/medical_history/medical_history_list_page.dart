@@ -4,6 +4,7 @@ import 'package:code/projectapp/models/surgery.dart';
 import 'package:code/projectapp/models/surgery_medical_history.dart';
 import 'package:code/projectapp/pages/appliances/appliances_list_page.dart';
 import 'package:code/projectapp/pages/medical_history/medical_history_create_page.dart';
+import 'package:code/projectapp/pages/medical_history/medical_history_info_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -230,11 +231,12 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                       in surgeryMedical?.medical_history ?? <MedicalHistory>[])
                     InkWell(
                       onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) =>
-                        //             AppliancesListPage())); //มาแก้หน้าที่Route
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MedicalHistoryInfoPage(medicalId:medicalHistory.id ),
+                          ),
+                        );
                       },
                       child: Card(
                         child: Padding(
