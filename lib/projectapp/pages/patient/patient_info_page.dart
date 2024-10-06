@@ -9,6 +9,7 @@ import 'package:code/projectapp/pages/patient/modals/surgery_create_modal.dart';
 import 'package:code/projectapp/pages/patient/patient_edit_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/patient.dart';
 
@@ -443,7 +444,8 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => PatientEditPage(
-                                              patientId: patient!.id))).then((val) {
+                                              patientId: patient!.id))).then(
+                                      (val) {
                                     setState(() {
                                       print('return 2');
                                     });
@@ -460,15 +462,20 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                         _InfoRow('ชื่อ-นามสกุล',
                             '${patient?.firstname} ${patient?.lastname}'),
                         _InfoRow('เพศ', '${patient?.sex}'),
-                        _InfoRow('วันเดือนปีเกิด', '${patient?.date_of_birth}'),
+                        _InfoRow(
+                            'วันเดือนปีเกิด',
+                            DateFormat('dd / MMM / yyyy').format(
+                                patient?.date_of_birth ?? DateTime.now())),
                         _InfoRow(
                             'หมายเลขโรงพยาบาล', '${patient?.hospital_number}'),
-                        _InfoRow('email',
-                            patient?.email?.toString() ?? '-'),
+                        _InfoRow('email', patient?.email?.toString() ?? '-'),
                         _InfoRow('ผู้ลงทะเบียน',
                             patient?.staff_id?.toString() ?? '-'),
-                        _InfoRow('วันเวลาลงทะเบียน',
-                            patient?.date_of_registration?.toString() ?? '-'),
+                        _InfoRow(
+                            'วันเวลาลงทะเบียน',
+                            DateFormat('dd / MMM / yyyy-H:MM:ss').format(
+                                patient?.date_of_registration ??
+                                    DateTime.now())),
                       ],
                     ),
                   ),
@@ -529,9 +536,11 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 8,),
+                  SizedBox(
+                    height: 8,
+                  ),
                   Container(
-                    height: 40,
+                    height: 45,
                     child: ElevatedButton(
                         onPressed: () async {
                           await showDialog(

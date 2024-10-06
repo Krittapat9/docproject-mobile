@@ -131,8 +131,8 @@ class _PatientListPage extends State<PatientListPage> {
                         });
                       },
                       child: Card(
-                        elevation: 4,
-                        color: Colors.grey[50],
+                        elevation: 8,
+                        color: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                         margin: EdgeInsets.all(4.0),

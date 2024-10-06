@@ -10,7 +10,7 @@ class Patient {
   final String firstname;
   final String lastname;
   final String sex;
-  final String date_of_birth;
+  final DateTime date_of_birth;
   final String hospital_number;
   final DateTime date_of_registration;
   final String? email;

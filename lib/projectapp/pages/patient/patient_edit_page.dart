@@ -83,7 +83,7 @@ class _PatientEditPage extends State<PatientEditPage> {
       firstnameController.text = patient!.firstname;
       lastnameController.text = patient!.lastname;
       sexController.text = patient!.sex;
-      dateOfBirthController.text = patient!.date_of_birth;
+      dateOfBirthController.text = patient!.date_of_birth.toIso8601String();
       hospitalNumberController.text = patient!.hospital_number;
       emailController.text = patient!.email ?? '';
       setState(() {

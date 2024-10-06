@@ -15,6 +15,7 @@ class ScheduleCreateModal extends StatefulWidget {
 
 class _ScheduleCreateModal extends State<ScheduleCreateModal> {
   TextEditingController workDateController = TextEditingController();
+  TextEditingController detailController = TextEditingController();
   TimeOfDay? startTime;
   TimeOfDay? endTime;
 
@@ -24,24 +25,28 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
     endTime = null;
   }
 
-  List<String> scheduleStartTimes = [
-    '8:00',
-    '9.00',
-    '10.00',
-    '11.00',
-    '13.00',
-    '14.00',
-    '15.00'
+  List<TimeOfDay> scheduleStartTimes = [
+    const TimeOfDay(hour: 8, minute: 0),
+    const TimeOfDay(hour: 9, minute: 0),
+    const TimeOfDay(hour: 10, minute: 0),
+    const TimeOfDay(hour: 11, minute: 0),
+    const TimeOfDay(hour: 13, minute: 0),
+    const TimeOfDay(hour: 14, minute: 0),
+    const TimeOfDay(hour: 15, minute: 0),
   ];
-  List<String> scheduleEndTimes = [
-    '9.00',
-    '10.00',
-    '11.00',
-    '12.00',
-    '14.00',
-    '15.00',
-    '16.00'
+  List<TimeOfDay> scheduleEndTimes = [
+    const TimeOfDay(hour: 9, minute: 0),
+    const TimeOfDay(hour: 10, minute: 0),
+    const TimeOfDay(hour: 11, minute: 0),
+    const TimeOfDay(hour: 12, minute: 0),
+    const TimeOfDay(hour: 14, minute: 0),
+    const TimeOfDay(hour: 15, minute: 0),
+    const TimeOfDay(hour: 16, minute: 0),
   ];
+
+  String formatTimeOfDay(TimeOfDay time) {
+    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+  }
 
   Future<void> _createSchedule() async {
     if (startTime == null ||
@@ -55,17 +60,20 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
       );
       return;
     }
+    var data = {
+      'work_date': workDateController.text,
+      'start_time': formatTimeOfDay(startTime!),
+      'end_time': formatTimeOfDay(endTime!),
+      'patient_id': widget.patientId,
+      'staff_id': Auth.currentUser?.id,
+      'detail': detailController.text,
+    };
+    print(data);
 
     final dio = Dio();
     final response = await dio.post(
       "http://10.0.2.2:3000/schedule",
-      data: {
-        'work_date': workDateController.text,
-        'start_time': startTime!.format(context),
-        'end_time': endTime!.format(context),
-        'patient_id': widget.patientId,
-        'staff_id': Auth.currentUser?.id,
-      },
+      data: data,
     );
     if (response.statusCode == 200) {
       print('work schedule created successfully!');
@@ -79,27 +87,27 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
     }
   }
 
-  Widget buildTimeSelection(List<String> times, String? selectedTime,
-      Function(String) onTimeSelected) {
-    return Wrap(
-      spacing: 10.0, // ระยะห่างระหว่างปุ่ม
-      children: times.map((time) {
-        return ElevatedButton(
-          onPressed: () {
-            setState(() {
-              onTimeSelected(time);
-            });
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: selectedTime == time
-                ? Colors.blue
-                : Colors.grey, // เปลี่ยนสีปุ่มที่เลือก
-          ),
-          child: Text(time),
-        );
-      }).toList(),
-    );
-  }
+  // Widget buildTimeSelection(List<String> times, String? selectedTime,
+  //     Function(String) onTimeSelected) {
+  //   return Wrap(
+  //     spacing: 10.0, // ระยะห่างระหว่างปุ่ม
+  //     children: times.map((time) {
+  //       return ElevatedButton(
+  //         onPressed: () {
+  //           setState(() {
+  //             onTimeSelected(time);
+  //           });
+  //         },
+  //         style: ElevatedButton.styleFrom(
+  //           backgroundColor: selectedTime == time
+  //               ? Colors.blue
+  //               : Colors.grey, // เปลี่ยนสีปุ่มที่เลือก
+  //         ),
+  //         child: Text(time),
+  //       );
+  //     }).toList(),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +188,14 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
             SizedBox(
               height: 30.0,
             ),
-            Text('Start time'),
+            Text(
+              'Start time',
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
@@ -192,23 +207,39 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          var h = int.parse(time.split(':')[0]);
-                          var m = int.parse(time.split(':')[1]);
-                          startTime = TimeOfDay(hour: h, minute: m);
+                          setState(() {
+                            startTime = time;
+                          });
                         },
-                        child: Text(time),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          // side: BorderSide(color: Colors.black),
+                          side: startTime == time
+                              ? const BorderSide(color: Colors.black)
+                              : null,
+                        ),
+                        child: Text(
+                          formatTimeOfDay(time),
+                          style: TextStyle(
+                            color: Color.fromRGBO(62, 28, 162, 1.0),
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                 ],
               ),
             ),
-            Text('End time'),
+            Text(
+              'End time',
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
@@ -219,18 +250,50 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text(time),
+                        onPressed: () {
+                          setState(() {
+                            endTime = time;
+                          });
+                        },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          // side: BorderSide(color: Colors.black),
+                          side: endTime == time
+                              ? const BorderSide(color: Colors.black)
+                              : null,
+                        ),
+                        child: Text(
+                          formatTimeOfDay(time),
+                          style: TextStyle(
+                            color: Color.fromRGBO(62, 28, 162, 1.0),
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 50,
+              width: 400,
+              child: TextField(
+                controller: detailController,
+                decoration: InputDecoration(
+                  labelText: 'Detail',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
             ),
             ElevatedButton(
               onPressed: () async {
