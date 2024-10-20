@@ -15,18 +15,14 @@ class Patient {
   final DateTime date_of_registration;
   final String? email;
 
-  Patient({
-    required this.id,
-    required this.staff_id,
-    required this.firstname,
-    required this.lastname,
-    required this.sex,
-    required this.date_of_birth,
-    required this.hospital_number,
-    required this.date_of_registration,
-    required this.email,
-  });
+  final String? staff_firstname;
+  final String? staff_lastname;
+
 
 
   factory Patient.fromJson(Map<String, dynamic> json) => _$PatientFromJson(json);
+
+  Patient({required this.id, required this.staff_id, required this.firstname, required this.lastname, required this.sex, required this.date_of_birth, required this.hospital_number, required this.date_of_registration, required this.email, required this.staff_firstname, required this.staff_lastname});
+
+
 }

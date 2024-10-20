@@ -154,10 +154,13 @@ class _PatientListPage extends State<PatientListPage> {
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 1),
-                            child: Text('email : ${patient.email}',style: TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.black,
-                            ),),
+                            child: Text(
+                              'email : ${patient.email}',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -166,6 +169,13 @@ class _PatientListPage extends State<PatientListPage> {
                 );
               },
             ),
+          ),
+          Container(
+            width: double.maxFinite,
+            height: 50,
+            color: Colors.grey,
+            padding: EdgeInsets.zero,
+            margin: EdgeInsets.zero,
           ),
         ],
       ),

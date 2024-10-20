@@ -1,9 +1,8 @@
 import 'dart:developer';
 import 'package:code/projectapp/models/appliances.dart';
+import 'package:code/projectapp/pages/appliances/appliances_edit_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
-import '../../models/patient.dart';
 
 class AppliancesInfoPage extends StatefulWidget {
   final int appliancesId;
@@ -31,19 +30,98 @@ class _AppliancesInfoPage extends State<AppliancesInfoPage> {
     }
   }
 
+  Future<bool> deleteAppliances(int id) async {
+    try {
+      final shouldDelete = await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Delete Appliance',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.redAccent,
+            ),
+          ),
+          content: Row(
+            children: [
+              Icon(
+                Icons.warning,
+                color: Colors.red,
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Expanded(child: Text('Are you sure to delete this appliance?')),
+            ],
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () async {
+                final dio = Dio();
+                final response =
+                    await dio.delete("http://10.0.2.2:3000/appliances/$id");
+
+                log('data:${response.data}');
+                log('response.statusCode=${response.statusCode}');
+
+                if (response.statusCode == 200) {
+                  Navigator.of(context).pop(true);
+                } else {
+                  throw Exception(
+                      'Failed to load appliance (status code: ${response.statusCode})');
+                }
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red[900]),
+              child: new Text(
+                'Delete',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(
+                    false); // dismisses only the dialog and returns nothing
+              },
+              style:
+                  ElevatedButton.styleFrom(backgroundColor: Colors.grey[100]),
+              child: new Text(
+                'cancel',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0),
+              ),
+            ),
+          ],
+        ),
+      );
+      if (shouldDelete == true) {
+        Navigator.of(context).pop();
+      }
+    } on Exception catch (e) {
+      log(e.toString());
+    }
+    return false;
+  }
+
   @override
   Widget _InfoRow(String label, String value) {
     return Row(
       children: [
         Text('$label : ',
             style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 14.0,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey)),
         Text(
           value,
           style: TextStyle(
-            fontSize: 16.0,
+            fontSize: 14.0,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -72,7 +150,7 @@ class _AppliancesInfoPage extends State<AppliancesInfoPage> {
           future: getAppliancesInfo(widget.appliancesId),
           builder: (context, snapshot) {
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -97,6 +175,60 @@ class _AppliancesInfoPage extends State<AppliancesInfoPage> {
                         _InfoRow('ชื่อถุงรองรับ', '${appliances?.name_pouch}'),
                         _InfoRow('ขนาด', '${appliances?.size}'),
                       ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AppliancesEditPage(appliancesId: appliances!.id),
+                        ),
+                      ).then((onValue) {
+                        setState(() {});
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 45.0),
+                        backgroundColor: Colors.yellow[600],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        textStyle: TextStyle(color: Colors.white)),
+                    child: Text(
+                      'edit',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await deleteAppliances(appliances!.id).then((onValue) {
+                        setState(() {});
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size(double.infinity, 45.0),
+                        backgroundColor: Colors.red[900],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        textStyle: TextStyle(color: Colors.white)),
+                    child: Text(
+                      'delete',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
                   ),
                 ],

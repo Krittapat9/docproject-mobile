@@ -65,7 +65,7 @@ class _LoginPage extends State<LoginPage> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
       );
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(),
@@ -94,8 +94,11 @@ class _LoginPage extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.all(30.0),
                 child: Text(
-                  'LOGIN STAFF',
-                  style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w900),
+                  'Login Staff',
+                  style: TextStyle(
+                      fontSize: 36.0,
+                      fontWeight: FontWeight.w900,
+                      color: Color.fromRGBO(62, 28, 168, 1.0)),
                 ),
               ),
               TextField(
@@ -146,13 +149,15 @@ class _LoginPage extends State<LoginPage> {
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 50.0),
                       backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
-                  SizedBox(height: 10.0),
+                  SizedBox(height: 8.0),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => StartPage()));
+                      Navigator.of(context).pop();
                     },
                     child: Text(
                       'Back',
@@ -163,7 +168,10 @@ class _LoginPage extends State<LoginPage> {
                     ),
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 50.0),
-                      backgroundColor: Colors.red,
+                      backgroundColor: Colors.red[800],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ],

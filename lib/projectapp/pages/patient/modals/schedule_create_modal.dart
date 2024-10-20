@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'package:code/projectapp/models/work_schedule.dart';
+import 'package:code/projectapp/pages/staff_work_schedule.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,7 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
   TextEditingController detailController = TextEditingController();
   TimeOfDay? startTime;
   TimeOfDay? endTime;
+  List<WorkSchedule> workScheduleList = [];
 
   void clearForm() {
     workDateController.clear();
@@ -46,6 +49,65 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
 
   String formatTimeOfDay(TimeOfDay time) {
     return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+  }
+
+  bool isSelectStartTimeEnable(TimeOfDay time) {
+    List<TimeOfDay> bookedTime = [];
+    for (var workSchedule in workScheduleList) {
+      var startTime = workSchedule.start_time.split(':');
+      var endTime = workSchedule.end_time.split(':');
+      var startTimeHour = int.parse(startTime[0]);
+      var endTimeHour = int.parse(endTime[0]);
+      log('startTimeHour = $startTimeHour endTimeHour =$endTimeHour');
+      for (var h = startTimeHour; h < endTimeHour; h++) {
+        bookedTime.add(TimeOfDay(hour: h, minute: 0));
+      }
+    }
+    log('bookedtime');
+    log(bookedTime.toString());
+    return !bookedTime.contains(time);
+  }
+
+  bool isSelectEndTimeEnable(TimeOfDay time) {
+    if (startTime == null) {
+      return false;
+    }
+    List<TimeOfDay> bookedTime = [];
+    for (var workSchedule in workScheduleList) {
+      var startTime = workSchedule.start_time.split(':');
+      var endTime = workSchedule.end_time.split(':');
+      var startTimeHour = int.parse(startTime[0]);
+      var endTimeHour = int.parse(endTime[0]);
+      log('startTimeHour = $startTimeHour endTimeHour =$endTimeHour');
+      for (var h = startTimeHour; h < endTimeHour; h++) {
+        bookedTime.add(TimeOfDay(hour: h, minute: 0));
+      }
+    }
+    log('bookedtime');
+    log(bookedTime.toString());
+
+    TimeOfDay nextStartTime = const TimeOfDay(hour: 23, minute: 59);
+    for (var t in bookedTime) {
+      if (t.hour > startTime!.hour && t.hour < nextStartTime.hour) {
+        nextStartTime = t;
+      }
+    }
+    log('nextStartTime = $nextStartTime');
+    return time.hour < nextStartTime.hour;
+  }
+
+  Future<void> _getWorkSchedule(DateTime workDate) async {
+    String formattedDate = DateFormat('yyyy-MM-dd').format(workDate);
+    log("http://10.0.2.2:3000/schedule/staff/${Auth.currentUser?.id}/$formattedDate");
+    final dio = Dio();
+    final response = await dio.get(
+      "http://10.0.2.2:3000/schedule/staff/${Auth.currentUser?.id}/$formattedDate",
+    );
+    List jsonList = response.data;
+    workScheduleList =
+        jsonList.map((json) => WorkSchedule.fromJson(json)).toList();
+    log(workScheduleList.toString());
+    setState(() {});
   }
 
   Future<void> _createSchedule() async {
@@ -127,7 +189,7 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
       //   ],
       // ),
       title: Center(
-        child: Text('นัดหมาย',
+        child: Text('เพิ่มการนัดหมาย',
             style: TextStyle(fontWeight: FontWeight.w800, fontSize: 19)),
       ),
       insetPadding: EdgeInsets.symmetric(horizontal: 10),
@@ -138,7 +200,35 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
         child: Column(
           children: [
             SizedBox(
-              height: 15.0,
+              height: 10,
+            ),
+            Container(
+              height: 45,
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StaffWorkSchedule()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(
+                          color: Color.fromRGBO(62, 28, 168, 1.0),
+                        )),
+                  ),
+                  child: Text(
+                    'Work Schedule',
+                    style: TextStyle(
+                      color: Color.fromRGBO(62, 28, 168, 1.0),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  )),
+            ),
+            SizedBox(
+              height: 14,
             ),
             Row(
               children: [
@@ -165,17 +255,21 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
                         lastDate: d.add(const Duration(days: 90)),
                       );
                       if (pickedDate != null) {
-                        print(
-                            pickedDate); //get the picked date in the format => 2022-07-04 00:00:00.000
-                        String formattedDate = DateFormat('yyyy-MM-dd').format(
-                            pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
-                        print(
-                            formattedDate); //formatted date output using intl package =>  2022-07-04
+                        await _getWorkSchedule(pickedDate);
+                        print(pickedDate);
+                        //get the picked date in the format => 2022-07-04 00:00:00.000
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        // format date in required form here we use yyyy-MM-dd that means time is removed
+                        print(formattedDate);
+                        //formatted date output using intl package =>  2022-07-04
                         //You can format date as per your need
 
                         setState(() {
                           workDateController.text =
                               formattedDate; //set foratted date to TextField value.
+                          startTime = null;
+                          endTime = null;
                         });
                       } else {
                         print("Date is not selected");
@@ -186,10 +280,10 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
               ],
             ),
             SizedBox(
-              height: 30.0,
+              height: 20.0,
             ),
             Text(
-              'Start time',
+              'Select start time',
               style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.black,
@@ -206,11 +300,15 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            startTime = time;
-                          });
-                        },
+                        onPressed: workDateController.text.isNotEmpty &&
+                                isSelectStartTimeEnable(time)
+                            ? () {
+                                setState(() {
+                                  startTime = time;
+                                  endTime = null;
+                                });
+                              }
+                            : null,
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
@@ -222,7 +320,10 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
                         child: Text(
                           formatTimeOfDay(time),
                           style: TextStyle(
-                            color: Color.fromRGBO(62, 28, 162, 1.0),
+                            color: workDateController.text.isNotEmpty &&
+                                    isSelectStartTimeEnable(time)
+                                ? const Color.fromRGBO(62, 28, 162, 1.0)
+                                : Colors.grey,
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
                           ),
@@ -232,8 +333,11 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
                 ],
               ),
             ),
+            SizedBox(
+              height: 5,
+            ),
             Text(
-              'End time',
+              'Select end time',
               style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.black,
@@ -250,23 +354,42 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            endTime = time;
-                          });
-                        },
+                        onPressed: workDateController.text.isNotEmpty &&
+                                isSelectEndTimeEnable(time)
+                            ? startTime == null
+                                ? null
+                                : (startTime != null &&
+                                        time.hour <= startTime!.hour)
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          endTime = time;
+                                        });
+                                      }
+                            : null,
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          side: endTime == time
-                              ? const BorderSide(color: Colors.black)
-                              : null,
+                          side: (startTime != null &&
+                                  time.hour <= startTime!.hour)
+                              ? const BorderSide(color: Colors.white)
+                              : endTime == time
+                                  ? const BorderSide(color: Colors.black)
+                                  : null,
                         ),
                         child: Text(
                           formatTimeOfDay(time),
                           style: TextStyle(
-                            color: Color.fromRGBO(62, 28, 162, 1.0),
+                            color: workDateController.text.isNotEmpty &&
+                                    isSelectEndTimeEnable(time)
+                                ? startTime == null
+                                    ? null
+                                    : (startTime != null &&
+                                            time.hour <= startTime!.hour)
+                                        ? Colors.grey
+                                        : Color.fromRGBO(62, 28, 162, 1.0)
+                                : Colors.grey,
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
                           ),

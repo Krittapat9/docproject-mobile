@@ -13,7 +13,9 @@ Surgery _$SurgeryFromJson(Map<String, dynamic> json) => Surgery(
       surgery_type_note_other: json['surgery_type_note_other'] as String?,
       disease_id: (json['disease_id'] as num).toInt(),
       disease_note_other: json['disease_note_other'] as String?,
-      date_of_surgery: DateTime.parse(json['date_of_surgery'] as String),
+      date_of_surgery: json['date_of_surgery'] == null
+          ? null
+          : DateTime.parse(json['date_of_surgery'] as String),
       staff_id: (json['staff_id'] as num).toInt(),
       case_id: (json['case_id'] as num).toInt(),
       disease_name: json['disease_name'] as String,
@@ -33,7 +35,7 @@ Map<String, dynamic> _$SurgeryToJson(Surgery instance) => <String, dynamic>{
       'surgery_type_note_other': instance.surgery_type_note_other,
       'disease_id': instance.disease_id,
       'disease_note_other': instance.disease_note_other,
-      'date_of_surgery': instance.date_of_surgery.toIso8601String(),
+      'date_of_surgery': instance.date_of_surgery?.toIso8601String(),
       'staff_id': instance.staff_id,
       'case_id': instance.case_id,
       'disease_name': instance.disease_name,

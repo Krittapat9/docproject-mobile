@@ -5,8 +5,10 @@ import 'package:code/projectapp/models/surgery_medical_history.dart';
 import 'package:code/projectapp/pages/appliances/appliances_list_page.dart';
 import 'package:code/projectapp/pages/medical_history/medical_history_create_page.dart';
 import 'package:code/projectapp/pages/medical_history/medical_history_info_page.dart';
+import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MedicalHistoryListPage extends StatefulWidget {
   final int surgeryId;
@@ -108,8 +110,6 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        InfoRow('รหัสผู้ป่วย',
-                            surgeryMedical?.patient.id?.toString() ?? '-'),
                         Row(
                           children: [
                             InfoRow('ชื่อ-นามสกุล',
@@ -118,6 +118,12 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                                 surgeryMedical?.patient.sex?.toString() ?? '-'),
                           ],
                         ),
+                        InfoRow(
+                            'วัน/เดือน/ปีเกิด',
+                            surgeryMedical?.patient.date_of_birth != null
+                                ? DateFormat('dd / MMM / yyyy').format(
+                                    surgeryMedical!.surgery.date_of_surgery!)
+                                : '-'),
                       ],
                     ),
                   ),
@@ -160,9 +166,10 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                                 '-'),
                         InfoRow(
                             'วัน/เดือน/ปี ที่ผ่าตัด',
-                            surgeryMedical?.surgery.date_of_surgery
-                                    ?.toString() ??
-                                '-'),
+                            surgeryMedical?.surgery.date_of_surgery != null
+                                ? DateFormat('dd / MMM / yyyy').format(
+                                    surgeryMedical!.surgery.date_of_surgery!)
+                                : '-'),
                         InfoRow('แพทย์ผู้ผ่าตัด',
                             '${surgeryMedical?.surgery.staff_firstname} ${surgeryMedical?.surgery.staff_lastname}'),
                         InfoRow(
@@ -181,50 +188,53 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MedicalHistoryCreatePage(
-                                    surgeryId: widget.surgeryId))).then((onValue) {
-                          setState(() {});
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        side: BorderSide(color: Colors.black),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            'เพิ่มการรักษา',
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green[900]),
+                  if (Auth.isStaff())
+                    Container(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          MedicalHistoryCreatePage(
+                                              surgeryId: widget.surgeryId)))
+                              .then((onValue) {
+                            setState(() {});
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          Spacer(),
-                          Icon(
-                            Icons.add,
-                            size: 36,
-                            color: Colors.green[900],
-                          )
-                        ],
+                          side: BorderSide(color: Colors.black),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              'เพิ่มการรักษา',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green[900]),
+                            ),
+                            Spacer(),
+                            Icon(
+                              Icons.add,
+                              size: 36,
+                              color: Colors.green[900],
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                   SizedBox(
                     height: 10,
                   ),
                   Center(
                     child: Text('ข้อมูลประวัติการรักษา',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15)),
+                            fontWeight: FontWeight.bold, fontSize: 16)),
                   ),
                   Divider(),
                   for (var medicalHistory
@@ -234,7 +244,8 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MedicalHistoryInfoPage(medicalId:medicalHistory.id ),
+                            builder: (context) => MedicalHistoryInfoPage(
+                                medicalId: medicalHistory.id),
                           ),
                         );
                       },
@@ -246,13 +257,17 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                               Expanded(
                                 child: Column(
                                   children: [
-                                    medicalStyle('id',
-                                        medicalHistory.id.toString() ?? '-'),
                                     medicalStyle(
-                                        'วัน-เวลารักษา',
-                                        medicalHistory.datetime_of_medical
-                                                .toString() ??
+                                        'Visit',
+                                        medicalHistory.case_id.toString() ??
                                             '-'),
+                                    medicalStyle(
+                                      'วัน-เวลารักษา',
+                                      DateFormat('dd / MMM / yyyy | HH:MM:ss')
+                                          .format(medicalHistory
+                                                  ?.datetime_of_medical ??
+                                              DateTime.now()),
+                                    ),
                                   ],
                                 ),
                               ),

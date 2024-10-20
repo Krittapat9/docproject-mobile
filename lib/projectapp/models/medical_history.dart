@@ -50,13 +50,15 @@ class MedicalHistory {
   final int medicine_id;
   final String medicine_name;
 
-  //final DateTime crated_at;
+  final int? case_id;
+
+
 
 
   factory MedicalHistory.fromJson(Map<String, dynamic> json) =>
       _$MedicalHistoryFromJson(json);
 
-  MedicalHistory({required this.id, required this.staff_id, required this.staff_firstname, required this.staff_lastname, required this.surgery_id, required this.datetime_of_medical, required this.type_of_diversion_id, required this.type_of_diversion_name, required this.type_of_diversion_note_other, required this.stoma_construction_id, required this.stoma_construction_name, required this.stoma_color_id, required this.stoma_color_name, required this.stoma_size_width_mm, required this.stoma_size_length_mm, required this.stoma_characteristics_id, required this.stoma_characteristics_name, required this.stoma_characteristics_note_other, required this.stoma_shape_id, required this.stoma_shape_name, required this.stoma_protrusion_id, required this.stoma_protrusion_name, required this.peristomal_skin_id, required this.peristomal_skin_name, required this.mucocutaneous_suture_line_id, required this.mucocutaneous_suture_line_name, required this.mucocutaneous_suture_line_note_other, required this.stoma_effluent_id, required this.stoma_effluent_name, required this.appliances_id, required this.appliances_name, required this.medicine_id, required this.medicine_name});
+  MedicalHistory({required this.id, required this.staff_id, required this.staff_firstname, required this.staff_lastname, required this.surgery_id, required this.datetime_of_medical, required this.type_of_diversion_id, required this.type_of_diversion_name, required this.type_of_diversion_note_other, required this.stoma_construction_id, required this.stoma_construction_name, required this.stoma_color_id, required this.stoma_color_name, required this.stoma_size_width_mm, required this.stoma_size_length_mm, required this.stoma_characteristics_id, required this.stoma_characteristics_name, required this.stoma_characteristics_note_other, required this.stoma_shape_id, required this.stoma_shape_name, required this.stoma_protrusion_id, required this.stoma_protrusion_name, required this.peristomal_skin_id, required this.peristomal_skin_name, required this.mucocutaneous_suture_line_id, required this.mucocutaneous_suture_line_name, required this.mucocutaneous_suture_line_note_other, required this.stoma_effluent_id, required this.stoma_effluent_name, required this.appliances_id, required this.appliances_name, required this.medicine_id, required this.medicine_name, required this.case_id});
 
 
 

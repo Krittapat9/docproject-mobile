@@ -10,7 +10,7 @@ class Surgery {
   final String? surgery_type_note_other;
   final int disease_id;
   final String? disease_note_other;
-  final DateTime date_of_surgery;
+  final DateTime? date_of_surgery;
   final int staff_id;
   final int case_id;
   final String disease_name;

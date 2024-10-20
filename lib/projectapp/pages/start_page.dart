@@ -26,50 +26,57 @@ class _StartPage extends State<StartPage> {
                 padding: const EdgeInsets.all(60.0),
                 child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
-                      },
-                      child: Text(
-                        'Login Staff',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0),
+                    Container(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                          );
+                        },
+                        child: Text(
+                          'Login Staff',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: Size(double.infinity, (50.0)),
+                            backgroundColor:
+                                const Color.fromRGBO(62, 28, 168, 1.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ))
                       ),
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity, (50.0)),
-                          backgroundColor:
-                              const Color.fromRGBO(62, 28, 168, 1.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          )),
                     ),
-                    SizedBox(height: 10.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPatientPage()),
-                        );
-                      },
-                      child: Text(
-                        'Login Patient',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(double.infinity, (50.0)),
-                        backgroundColor:
-                            const Color.fromRGBO(34, 135, 117, 1.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          )
+                    SizedBox(height: 8.0),
+                    Container(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPatientPage()),
+                          );
+                        },
+                        child: Text(
+                          'Login Patient',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: Size(double.infinity, (50.0)),
+                            backgroundColor:
+                                const Color.fromRGBO(34, 135, 117, 1.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            )),
                       ),
                     ),
                   ],

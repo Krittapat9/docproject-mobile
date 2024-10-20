@@ -1,8 +1,11 @@
 import 'package:code/projectapp/pages/appliances/appliances_list_page.dart';
+import 'package:code/projectapp/pages/medicine/medicine_list_page.dart';
 import 'package:code/projectapp/pages/patient/patient_create_page.dart';
+import 'package:code/projectapp/pages/patient/patient_info_page.dart';
 import 'package:code/projectapp/pages/patient/patient_list_page.dart';
 import 'package:code/projectapp/pages/setting_page.dart';
 import 'package:code/projectapp/pages/staff/staff_register_pager.dart';
+import 'package:code/projectapp/pages/staff_work_schedule.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -59,29 +62,46 @@ class _HomePage extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
-        title: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'Hello, $_fullName \n',
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+          backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
+          title: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Hello, $_fullName \n',
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              TextSpan(
-                text: 'staff id : $_userId',
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  color: Color.fromRGBO(255, 255, 255, 0.5),
+                TextSpan(
+                  text: 'staff id : $_userId',
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Color.fromRGBO(255, 255, 255, 0.5),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        automaticallyImplyLeading: false,
+          automaticallyImplyLeading: false,
+          actions: [
+            Builder(
+              builder: (context) {
+                return IconButton(
+                  icon: const Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                );
+              },
+            ),
+          ]),
+      drawer: Drawer(
+        child: Text('hello'),
       ),
       body: Center(
         child: Container(
@@ -127,22 +147,67 @@ class _HomePage extends State<HomePage> {
                   child: menuButton(
                     'Register Staff',
                     'assets/images/doctor.png',
-                        () {
+                    () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) =>StaffRegisterPage()),
+                        MaterialPageRoute(
+                            builder: (context) => StaffRegisterPage()),
+                      );
+                    },
+                  ),
+                ),
+              if (!Auth.isStaff() && !Auth.isAdmin())
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: menuButton(
+                    'My Information',
+                    'assets/images/patient.png',
+                    () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PatientInfoPage(
+                              patientId: AuthPatient.currentUser!.id),
+                        ),
                       );
                     },
                   ),
                 ),
 
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: menuButton(
+                  'Appliances',
+                  'assets/images/first-aid-kit.png',
+                  () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => AppliancesListPage()),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: menuButton(
+                  'Medicine',
+                  'assets/images/drugs.png',
+                  () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => MedicineListPage()),
+                    );
+                  },
+                ),
+              ),
+              if (Auth.isStaff())
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: menuButton(
-                    'Appliances',
-                    'assets/images/first-aid-kit.png',
+                    'Work Schedule',
+                    'assets/images/calendartime.png',
                     () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => AppliancesListPage()),
+                        MaterialPageRoute(
+                            builder: (context) => StaffWorkSchedule()),
                       );
                     },
                   ),

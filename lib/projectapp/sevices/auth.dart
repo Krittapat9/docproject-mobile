@@ -1,3 +1,4 @@
+import 'package:code/projectapp/models/patient.dart';
 import 'package:code/projectapp/models/staff.dart';
 
 class Auth {
@@ -14,4 +15,17 @@ class Auth {
   static bool isStaff() {
     return isLogin() && currentUser?.is_admin == 0;
   }
+
 }
+class AuthPatient{
+  static Patient? currentUser;
+
+  static bool isLogin() {
+    return currentUser != null;
+
+  }
+  static bool isPatient() {
+    return isLogin() ;
+  }
+}
+

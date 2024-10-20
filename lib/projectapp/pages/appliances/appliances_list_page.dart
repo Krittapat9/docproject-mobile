@@ -1,16 +1,11 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:code/projectapp/models/appliances.dart';
-import 'package:code/projectapp/models/patient.dart';
 import 'package:code/projectapp/pages/appliances/appliances_create_page.dart';
 import 'package:code/projectapp/pages/appliances/appliances_info_page.dart';
-import 'package:code/projectapp/pages/patient/patient_info_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
-import '../../main.dart';
 
 class AppliancesListPage extends StatefulWidget {
   const AppliancesListPage({super.key});
@@ -32,15 +27,16 @@ class _AppliancesListPage extends State<AppliancesListPage> {
       log('data:${response.data}');
       if (response.statusCode == 200) {
         List jsonList = response.data;
-        appliancesList = jsonList.map((json) => Appliances.fromJson(json)).toList();
+        appliancesList =
+            jsonList.map((json) => Appliances.fromJson(json)).toList();
         return appliancesList;
       } else {
-        // throw Exception(
-        //     'Failed to load patients (status code: ${response.statusCode})');
-      }
+
+      }throw Exception(
+          'Failed to load appliance (status code: ${response.statusCode})');
     } catch (error) {
       log('err:$error');
-      // throw Exception('Error fetching patients: $error');
+      throw Exception('Error fetching appliance: $error');
     }
     return [];
   }
@@ -58,10 +54,9 @@ class _AppliancesListPage extends State<AppliancesListPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-
         actions: [
           if (Auth.isAdmin())
-          TextButton(
+            TextButton(
               onPressed: () {
                 Navigator.push(
                     context,
@@ -72,9 +67,9 @@ class _AppliancesListPage extends State<AppliancesListPage> {
                 'assets/images/plus-square-white.png',
                 width: 30.0,
                 height: 30.0,
-              ))
+              ),
+            ),
         ],
-
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
           onPressed: () => Navigator.pop(context),
@@ -100,7 +95,8 @@ class _AppliancesListPage extends State<AppliancesListPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AppliancesInfoPage(appliancesId: appliances.id),
+                      builder: (context) =>
+                          AppliancesInfoPage(appliancesId: appliances.id),
                     ),
                   );
                 },

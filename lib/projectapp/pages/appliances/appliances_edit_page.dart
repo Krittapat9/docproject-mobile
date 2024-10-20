@@ -1,15 +1,19 @@
-import 'package:code/projectapp/pages/appliances/appliances_list_page.dart';
+import 'package:code/projectapp/models/appliances.dart';
+import 'package:code/projectapp/models/patient.dart';
+import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer';
 
-class AppliancesCreatePage extends StatefulWidget {
-  const AppliancesCreatePage({super.key});
+class AppliancesEditPage extends StatefulWidget {
+  final int appliancesId;
+  AppliancesEditPage({super.key, required this.appliancesId});
 
   @override
-  State<AppliancesCreatePage> createState() => _AppliancesCreatePage();
+  State<AppliancesEditPage> createState() => _AppliancesEditPage();
 }
 
-class _AppliancesCreatePage extends State<AppliancesCreatePage> {
+class _AppliancesEditPage extends State<AppliancesEditPage> {
   TextEditingController typeController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController brandController = TextEditingController();
@@ -25,11 +29,25 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
     namePouchController.text = '';
     sizeController.text = '';
   }
-
-  Future<void> _createAppliances() async {
+  Appliances? appliances;
+  Future<Appliances> getAppliancesInfo(int id) async {
     final dio = Dio();
-    final response = await dio.post(
-      "http://10.0.2.2:3000/appliances",
+    final response = await dio.get("http://10.0.2.2:3000/appliances/$id");
+
+    log('data:${response.data}');
+    if (response.statusCode == 200) {
+      appliances = Appliances.fromJson(response.data);
+      return appliances!;
+    } else {
+      throw Exception(
+          'Failed to load patients (status code: ${response.statusCode})');
+    }
+  }
+
+  Future<void> _editPatient() async {
+    final dio = Dio();
+    final response = await dio.put(
+      "http://10.0.2.2:3000/patient/${appliances!.id}",
       data: {
         'type': typeController.text,
         'name': nameController.text,
@@ -40,17 +58,30 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
       },
     );
     if (response.statusCode == 200) {
-      print('Patient created successfully!');
       clearForm();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AppliancesListPage(),
-        ),
-      );
+      Navigator.of(context).pop();
     } else {
       print('Error creating patient: ${response.data}');
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero,() async{
+      await getAppliancesInfo(widget.appliancesId);
+      typeController.text = appliances!.type;
+      nameController.text = appliances!.name;
+      brandController.text = appliances!.brand;
+      nameFlangeController.text = appliances!.name_flange;
+      namePouchController.text = appliances!.name_pouch;
+      sizeController.text = appliances!.size;
+      setState(() {
+
+      });
+    } );
+
   }
 
   @override
@@ -59,7 +90,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
         title: const Text(
-          'Add Appliances',
+          'Edit Appliance',
           style: const TextStyle(
             fontSize: 18.0,
             color: Colors.white,
@@ -70,8 +101,6 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
           icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
           onPressed: () => Navigator.pop(context),
         ),
-
-
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -80,7 +109,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: typeController,
               decoration: InputDecoration(
-                labelText: 'ประเภทอุปกรณ์',
+                labelText: 'type',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -92,7 +121,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: nameController,
               decoration: InputDecoration(
-                labelText: 'ชื่อชุดอุปกรณ์',
+                labelText: 'name appliance set',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -104,7 +133,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: brandController,
               decoration: InputDecoration(
-                labelText: 'ยี่ห้อ',
+                labelText: 'brand',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -116,7 +145,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: nameFlangeController,
               decoration: InputDecoration(
-                labelText: 'ชื่อแป้นปิดหน้าท้อง',
+                labelText: 'name flange',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -128,7 +157,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: namePouchController,
               decoration: InputDecoration(
-                labelText: 'ชื่อถุงรองรับ',
+                labelText: 'name pouch',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -140,7 +169,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: sizeController,
               decoration: InputDecoration(
-                labelText: 'ขนาด',
+                labelText: 'size',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -151,18 +180,21 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             ),
             ElevatedButton(
               onPressed: () async {
-                await _createAppliances();
+                await _editPatient();
               },
               child: Text(
-                'Save',
+                'Edit',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0),
               ),
               style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50.0),
-                  backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
+                  backgroundColor: Colors.yellow,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   textStyle: TextStyle(color: Colors.white)),
             )
           ],

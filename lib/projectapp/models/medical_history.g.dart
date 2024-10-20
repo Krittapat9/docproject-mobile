@@ -48,6 +48,7 @@ MedicalHistory _$MedicalHistoryFromJson(Map<String, dynamic> json) =>
       appliances_name: json['appliances_name'] as String,
       medicine_id: (json['medicine_id'] as num).toInt(),
       medicine_name: json['medicine_name'] as String,
+      case_id: (json['case_id'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$MedicalHistoryToJson(MedicalHistory instance) =>
@@ -87,4 +88,5 @@ Map<String, dynamic> _$MedicalHistoryToJson(MedicalHistory instance) =>
       'appliances_name': instance.appliances_name,
       'medicine_id': instance.medicine_id,
       'medicine_name': instance.medicine_name,
+      'case_id': instance.case_id,
     };

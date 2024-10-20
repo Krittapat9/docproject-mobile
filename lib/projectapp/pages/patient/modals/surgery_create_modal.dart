@@ -6,6 +6,7 @@ import 'package:code/projectapp/pages/patient/patient_list_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class SurgeryCreateModal extends StatefulWidget {
   final int patientId;
@@ -97,7 +98,7 @@ class _SurgeryCreateModal extends State<SurgeryCreateModal> {
       log('err:$error');
       // throw Exception('Error fetching surgery type: $error');
     }
-    await Future.delayed(Duration(seconds: 1));
+    // await Future.delayed(Duration(seconds: 1));
 
     return true;
   }
@@ -240,18 +241,50 @@ class _SurgeryCreateModal extends State<SurgeryCreateModal> {
                     SizedBox(
                       height: 20.0,
                     ),
-                    Container(
-                      height: 50,
-                      width: 400,
-                      child: TextField(
-                        controller: dateOfSurgeryController,
-                        decoration: InputDecoration(
-                          labelText: 'วัน/เดือน/ปี ที่ผ่าตัด',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: dateOfSurgeryController,
+                            //editing controller of this TextField
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.calendar_today),
+                              //icon of text field
+                              labelText: "Enter Date of Surgery", //label text of field
+                            ),
+                            readOnly: true,
+                            // when true user cannot edit text
+                            onTap: () async {
+                              final d = DateTime.now();
+
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: d.add(const Duration(days: 1)),
+                                //get today's date
+                                firstDate: DateTime.now(),
+                                //DateTime.now() - not to allow to choose before today.
+                                lastDate: d.add(const Duration(days: 90)),
+                              );
+                              if (pickedDate != null) {
+                                print(
+                                    pickedDate); //get the picked date in the format => 2022-07-04 00:00:00.000
+                                String formattedDate = DateFormat('dd / MMM / yyyy').format(
+                                    pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
+                                print(
+                                    formattedDate); //formatted date output using intl package =>  2022-07-04
+                                //You can format date as per your need
+
+                                setState(() {
+                                  dateOfSurgeryController.text =
+                                      formattedDate; //set foratted date to TextField value.
+                                });
+                              } else {
+                                print("Date is not selected");
+                              }
+                            },
                           ),
-                        ),
-                      ),
+                        )
+                      ],
                     ),
                     SizedBox(
                       height: 30.0,

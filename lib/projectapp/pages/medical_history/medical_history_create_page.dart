@@ -316,7 +316,7 @@ class _MedicalHistoryCreatePage extends State<MedicalHistoryCreatePage> {
           future: loadDataMedical(),
           builder: (context, snapshot) {
             return Padding(
-              padding: EdgeInsets.symmetric(vertical: 30),
+              padding: EdgeInsets.symmetric(vertical: 15),
               child: Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:code/projectapp/models/login_patient.dart';
+import 'package:code/projectapp/models/patient.dart';
 import 'package:code/projectapp/models/staff.dart';
 import 'package:code/projectapp/pages/home_page.dart';
 import 'package:code/projectapp/pages/start_page.dart';
@@ -19,23 +21,20 @@ class LoginPatientPage extends StatefulWidget {
 }
 
 class _LoginPatientPage extends State<LoginPatientPage> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  bool _obscureText = true;
+  TextEditingController emailController = TextEditingController();
 
-  Future<void> _login() async {
+  Future<void> _loginPatient() async {
     try {
       final dio = Dio();
       final response = await dio.post(
-        "http://10.0.2.2:3000/login",
+        "http://10.0.2.2:3000/login_patient",
         data: {
-          'username': usernameController.text,
-          'password': passwordController.text,
+          'email': emailController.text,
         },
       );
 
-      final loginData = Login.fromJson(response.data);
-      Auth.currentUser = loginData.staff as Staff?;
+      final loginData = LoginPatient.fromJson(response.data);
+      AuthPatient.currentUser = loginData.patient as Patient?;
 
       print('response.statusCode: ${response.statusCode}');
       print('response.data: ${response.data}');
@@ -65,7 +64,7 @@ class _LoginPatientPage extends State<LoginPatientPage> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
       );
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(),
@@ -85,71 +84,79 @@ class _LoginPatientPage extends State<LoginPatientPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+      child: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(30.0),
+                child: Text(
+                  'Login Patient',
+                  style: TextStyle(
+                    fontSize: 36.0,
+                    fontWeight: FontWeight.w900,
+                    color: Color.fromRGBO(34, 135, 117, 1.0),
+                  ),
+                ),
+              ),
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                    labelText: 'E-mail',
+                    prefixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0))),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.all(30.0),
+                  ElevatedButton(
+                    onPressed: _loginPatient,
                     child: Text(
-                      'LOGIN PATIENT',
-                      style: TextStyle(fontSize: 32.0, fontWeight: FontWeight.w900),
+                      'Login',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 50.0),
+                      backgroundColor: const Color.fromRGBO(34, 135, 117, 1.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                     ),
                   ),
-                  TextField(
-                    controller: usernameController,
-                    decoration: InputDecoration(
-                        labelText: 'e-mail',
-                        prefixIcon: Icon(Icons.person),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0))),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: _login,
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity, 50.0),
-                          backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
-                        ),
+                  SizedBox(height: 8.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Back',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 50.0),
+                      backgroundColor: Colors.red[800],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      SizedBox(height: 10.0),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) => StartPage()));
-                        },
-                        child: Text(
-                          'Back',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity, 50.0),
-                          backgroundColor: Colors.red,
-                        ),
-                      ),
-                    ],
-                  )
+                    ),
+                  ),
                 ],
-              ),
-            ),
+              )
+            ],
           ),
-        ));
+        ),
+      ),
+    ));
   }
 }

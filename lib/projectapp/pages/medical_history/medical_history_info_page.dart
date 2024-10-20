@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:code/projectapp/models/medical_history.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MedicalHistoryInfoPage extends StatefulWidget {
   final int medicalId;
@@ -82,7 +83,8 @@ class _MedicalHistoryInfoPage extends State<MedicalHistoryInfoPage> {
                     decoration: BoxDecoration(
                       color: Colors.grey[50],
                       border: Border.all(
-                        color: Colors.grey,width: 2,
+                        color: Colors.grey,
+                        width: 2,
                       ),
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -93,10 +95,13 @@ class _MedicalHistoryInfoPage extends State<MedicalHistoryInfoPage> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16)),
                         Divider(),
-                        _InfoRow('รหัสการรักษา',
-                            medicalHistory?.id?.toString() ?? '-'),
-                        _InfoRow('วัน/เดือน/ปี',
-                            '${medicalHistory?.datetime_of_medical}'),
+                        _InfoRow('Visit ครั้งที่',
+                            medicalHistory?.case_id?.toString() ?? '-'),
+                        _InfoRow(
+                            'วัน/เดือน/ปี',
+                            DateFormat('dd / MMM / yyyy | HH:MM:ss').format(
+                                medicalHistory?.datetime_of_medical ??
+                                    DateTime.now())),
                       ],
                     ),
                   ),
@@ -106,7 +111,7 @@ class _MedicalHistoryInfoPage extends State<MedicalHistoryInfoPage> {
                   Container(
                     padding: EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black,width: 1.5),
+                      border: Border.all(color: Colors.black, width: 1.5),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

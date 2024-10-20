@@ -3,6 +3,7 @@ import 'package:code/projectapp/pages/patient/patient_info_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class PatientCreatePage extends StatefulWidget {
   PatientCreatePage({super.key});
@@ -154,14 +155,51 @@ class _PatientCreatePage extends State<PatientCreatePage> {
             SizedBox(
               height: 20.0,
             ),
-            TextField(
-              controller: dateOfBirthController,
-              decoration: InputDecoration(
-                labelText: 'date of birth',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: dateOfBirthController,
+                    //editing controller of this TextField
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.calendar_today),
+                      //icon of text field
+                      labelText: "Enter Date of Birth", //label text of field
+                    ),
+                    readOnly: true,
+                    // when true user cannot edit text
+                    onTap: () async {
+                      final d = DateTime.now();
+
+                      DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: d,
+                        //get today's date
+                        firstDate: DateTime(1900),
+                        //DateTime.now() - not to allow to choose before today.
+                        lastDate: d,
+                      );
+
+                      if (pickedDate != null) {
+                        print(
+                            pickedDate); //get the picked date in the format => 2022-07-04 00:00:00.000
+                        String formattedDate = DateFormat('dd / MMM / yyyy').format(
+                            pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
+                        print(
+                            formattedDate); //formatted date output using intl package =>  2022-07-04
+                        //You can format date as per your need
+
+                        setState(() {
+                          dateOfBirthController.text =
+                              formattedDate; //set foratted date to TextField value.
+                        });
+                      } else {
+                        print("Date is not selected");
+                      }
+                    },
+                  ),
+                )
+              ],
             ),
             SizedBox(
               height: 20.0,

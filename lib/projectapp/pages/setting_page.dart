@@ -1,4 +1,3 @@
-import 'package:code/projectapp/pages/login_page.dart';
 import 'package:code/projectapp/pages/start_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +44,7 @@ class _SettingPage extends State<SettingPage> {
           children: [
             ElevatedButton(
               onPressed: _logout,
-              child: const Text('Logout', style: TextStyle(
+              child: const Text('LOGOUT', style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,
                 color: Colors.white,
