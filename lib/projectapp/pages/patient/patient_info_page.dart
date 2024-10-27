@@ -450,7 +450,26 @@ class _PatientInfoPage extends State<PatientInfoPage> {
           icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
           onPressed: () => Navigator.pop(context),
         ),
+          automaticallyImplyLeading: false,
+          actions: [
+            Builder(
+              builder: (context) {
+                return IconButton(
+                  icon: const Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                );
+              },
+            ),
+          ]),
+      drawer: Drawer(
+        child: Text('hello'),
       ),
+
       body: Column(
         children: [
           Expanded(

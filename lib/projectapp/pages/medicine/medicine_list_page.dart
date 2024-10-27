@@ -63,7 +63,9 @@ class _MedicineListPage extends State<MedicineListPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MedicineCreatePage()));
+                          builder: (context) => MedicineCreatePage())).then((onValue) {
+                    setState(() {});
+                  });
                 },
                 child: Image.asset(
                   'assets/images/plus-square-white.png',
@@ -99,7 +101,9 @@ class _MedicineListPage extends State<MedicineListPage> {
                       builder: (context) =>
                           MedicineInfoPage(medicineId: medicine.id),
                     ),
-                  );
+                  ).then((onValue) {
+                    setState(() {});
+                  });
                 },
                 child: Card(
                   elevation: 4,

@@ -47,7 +47,7 @@ class _AppliancesEditPage extends State<AppliancesEditPage> {
   Future<void> _editPatient() async {
     final dio = Dio();
     final response = await dio.put(
-      "http://10.0.2.2:3000/patient/${appliances!.id}",
+      "http://10.0.2.2:3000/appliances/${appliances!.id}",
       data: {
         'type': typeController.text,
         'name': nameController.text,
@@ -118,13 +118,16 @@ class _AppliancesEditPage extends State<AppliancesEditPage> {
             SizedBox(
               height: 20.0,
             ),
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: 'name appliance set',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+            Container(
+              child: TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: 'name appliance set',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                 ),
+                maxLines: 3,
               ),
             ),
             SizedBox(

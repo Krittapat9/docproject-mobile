@@ -93,7 +93,7 @@ class _ScheduleCreateModal extends State<ScheduleCreateModal> {
       }
     }
     log('nextStartTime = $nextStartTime');
-    return time.hour < nextStartTime.hour;
+    return time.hour <= nextStartTime.hour;
   }
 
   Future<void> _getWorkSchedule(DateTime workDate) async {

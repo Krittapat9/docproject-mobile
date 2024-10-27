@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:code/projectapp/models/appliances.dart';
 import 'package:code/projectapp/pages/appliances/appliances_edit_page.dart';
+import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -150,7 +151,7 @@ class _AppliancesInfoPage extends State<AppliancesInfoPage> {
           future: getAppliancesInfo(widget.appliancesId),
           builder: (context, snapshot) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -167,8 +168,9 @@ class _AppliancesInfoPage extends State<AppliancesInfoPage> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18)),
                         Divider(),
-                        _InfoRow(
-                            'รหัสอุปกรณ์', appliances?.id?.toString() ?? '-'),
+                        // _InfoRow(
+                        //     'รหัสอุปกรณ์', appliances?.id?.toString() ?? '-'),
+                        _InfoRow('ประเภท', '${appliances?.type}'),
                         _InfoRow('ยี่ห้อ', '${appliances?.brand}'),
                         _InfoRow('ชื่อแป้นปิดหน้าท้อง',
                             '${appliances?.name_flange}'),
@@ -180,6 +182,7 @@ class _AppliancesInfoPage extends State<AppliancesInfoPage> {
                   SizedBox(
                     height: 15,
                   ),
+                  if (Auth.isAdmin())
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -210,6 +213,7 @@ class _AppliancesInfoPage extends State<AppliancesInfoPage> {
                   SizedBox(
                     height: 5,
                   ),
+                  if (Auth.isAdmin())
                   ElevatedButton(
                     onPressed: () async {
                       await deleteAppliances(appliances!.id).then((onValue) {

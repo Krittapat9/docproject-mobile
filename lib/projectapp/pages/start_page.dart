@@ -48,7 +48,7 @@ class _StartPage extends State<StartPage> {
                             backgroundColor:
                                 const Color.fromRGBO(62, 28, 168, 1.0),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(12),
                             ))
                       ),
                     ),
@@ -75,7 +75,7 @@ class _StartPage extends State<StartPage> {
                             backgroundColor:
                                 const Color.fromRGBO(34, 135, 117, 1.0),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(12),
                             )),
                       ),
                     ),

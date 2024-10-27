@@ -32,7 +32,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
       "http://10.0.2.2:3000/appliances",
       data: {
         'type': typeController.text,
-        'name': nameController.text,
+        'name': '${brandController.text}\n${nameFlangeController.text}\n${namePouchController.text}',
         'brand': brandController.text,
         'name_flange': nameFlangeController.text,
         'name_pouch': namePouchController.text,
@@ -40,16 +40,11 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
       },
     );
     if (response.statusCode == 200) {
-      print('Patient created successfully!');
+      print('Appliance created successfully!');
       clearForm();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AppliancesListPage(),
-        ),
-      );
+      Navigator.of(context).pop();
     } else {
-      print('Error creating patient: ${response.data}');
+      print('Error creating appilance: ${response.data}');
     }
   }
 
@@ -80,19 +75,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: typeController,
               decoration: InputDecoration(
-                labelText: 'ประเภทอุปกรณ์',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            TextField(
-              controller: nameController,
-              decoration: InputDecoration(
-                labelText: 'ชื่อชุดอุปกรณ์',
+                labelText: 'Type',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -104,7 +87,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: brandController,
               decoration: InputDecoration(
-                labelText: 'ยี่ห้อ',
+                labelText: 'brand',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -116,7 +99,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: nameFlangeController,
               decoration: InputDecoration(
-                labelText: 'ชื่อแป้นปิดหน้าท้อง',
+                labelText: 'name flange',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -128,7 +111,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: namePouchController,
               decoration: InputDecoration(
-                labelText: 'ชื่อถุงรองรับ',
+                labelText: 'name pouch',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -140,7 +123,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
             TextField(
               controller: sizeController,
               decoration: InputDecoration(
-                labelText: 'ขนาด',
+                labelText: 'size',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

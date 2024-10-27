@@ -1,9 +1,12 @@
+import 'package:code/projectapp/models/work_schedule.dart';
 import 'package:code/projectapp/pages/appliances/appliances_list_page.dart';
 import 'package:code/projectapp/pages/medicine/medicine_list_page.dart';
+import 'package:code/projectapp/pages/patient/patient_appointment_page.dart';
 import 'package:code/projectapp/pages/patient/patient_create_page.dart';
 import 'package:code/projectapp/pages/patient/patient_info_page.dart';
 import 'package:code/projectapp/pages/patient/patient_list_page.dart';
 import 'package:code/projectapp/pages/setting_page.dart';
+import 'package:code/projectapp/pages/staff/staff_edit_password.dart';
 import 'package:code/projectapp/pages/staff/staff_register_pager.dart';
 import 'package:code/projectapp/pages/staff_work_schedule.dart';
 import 'package:code/projectapp/sevices/auth.dart';
@@ -18,15 +21,72 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
-  String get _fullName =>
-      Auth.currentUser?.firstname != null && Auth.currentUser?.lastname != null
-          ? '${Auth.currentUser!.firstname} ${Auth.currentUser!.lastname} '
-          : 'Guest';
+  int notificationCount = 0;
 
-  String get _userId =>
-      Auth.currentUser?.id != null ? '${Auth.currentUser!.id}' : 'Guest';
+  Future<bool> loadAppointmentUpcoming(int patientId) async {
+    try {
+      final dio = Dio();
+      final response = await dio
+          .get("http://10.0.2.2:3000/appointment/patient/$patientId/upcoming");
 
-  Widget menuButton(String label, String iconPath, void Function() onClick) {
+      if (response.statusCode == 200) {
+        List jsonList = response.data;
+
+        setState(() {
+          notificationCount = jsonList
+              .map((json) => WorkSchedule.fromJson(json))
+              .toList()
+              .length;
+          print("notificationCount: $notificationCount");
+        });
+      } else {
+        throw Exception(
+            'Failed to load patients (status code: ${response.statusCode})');
+      }
+    } on Exception catch (e) {}
+    return true;
+  }
+
+  String get _fullName {
+    if (Auth.currentUser != null &&
+        Auth.currentUser?.firstname != null &&
+        Auth.currentUser?.lastname != null) {
+      return '${Auth.currentUser!.firstname} ${Auth.currentUser!.lastname} ';
+    } else if (AuthPatient.currentUser != null &&
+        AuthPatient.currentUser?.firstname != null &&
+        AuthPatient.currentUser?.lastname != null) {
+      return '${AuthPatient.currentUser!.firstname} ${AuthPatient.currentUser!.lastname} ';
+    } else {
+      return 'Guest';
+    }
+  }
+
+  // String get _userId =>
+  //     Auth.currentUser?.id != null ? '${Auth.currentUser!.id}' : 'Guest';
+
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      if (Auth.currentUser!.is_admin == 0 &&
+          Auth.currentUser!.first_login == 0) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StaffEditPasswordPage(),
+          ),
+        );
+      }
+    });
+    loadAppointmentUpcoming(AuthPatient.currentUser!.id);
+  }
+
+  Widget menuButton(
+    String label,
+    String iconPath,
+    void Function() onClick, {
+    int notification = 0,
+  }) {
     return ElevatedButton(
       onPressed: onClick,
       style: ElevatedButton.styleFrom(
@@ -45,6 +105,9 @@ class _HomePage extends State<HomePage> {
             iconPath,
             height: 60,
           ),
+          SizedBox(
+            height: 8,
+          ),
           Text(
             label,
             style: TextStyle(
@@ -53,6 +116,24 @@ class _HomePage extends State<HomePage> {
               color: Color.fromRGBO(62, 28, 168, 1.0),
             ),
           ),
+
+          if (notification > 0)
+            Container(
+              width: 25,
+              height: 25,
+              child: Center(
+                child: Text(
+                  '$notification',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.red,
+              ),
+            )
         ],
       ),
     );
@@ -60,6 +141,17 @@ class _HomePage extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String userType;
+    if (Auth.isAdmin()) {
+      userType = 'Admin';
+    } else if (Auth.isStaff()) {
+      userType = 'medical personnel';
+    } else if (AuthPatient.isPatient()) {
+      userType = 'patient';
+    } else {
+      userType = 'guest';
+    }
+
     return Scaffold(
       appBar: AppBar(
           backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
@@ -69,15 +161,16 @@ class _HomePage extends State<HomePage> {
                 TextSpan(
                   text: 'Hello, $_fullName \n',
                   style: const TextStyle(
-                    fontSize: 16.0,
+                    fontSize: 17.0,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 TextSpan(
-                  text: 'staff id : $_userId',
+                  text: 'User : $userType',
                   style: const TextStyle(
-                    fontSize: 16.0,
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(255, 255, 255, 0.5),
                   ),
                 ),
@@ -171,33 +264,50 @@ class _HomePage extends State<HomePage> {
                     },
                   ),
                 ),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: menuButton(
-                  'Appliances',
-                  'assets/images/first-aid-kit.png',
-                  () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => AppliancesListPage()),
-                    );
-                  },
+              if (!Auth.isStaff() && !Auth.isAdmin())
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: menuButton(
+                    'Appointment',
+                    'assets/images/patient.png',
+                    () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => PatientAppointmentPage(),
+                        ),
+                      );
+                    },
+                    notification: notificationCount,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: menuButton(
-                  'Medicine',
-                  'assets/images/drugs.png',
-                  () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => MedicineListPage()),
-                    );
-                  },
+              if (Auth.isStaff() || Auth.isAdmin())
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: menuButton(
+                    'Appliances',
+                    'assets/images/first-aid-kit.png',
+                    () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => AppliancesListPage()),
+                      );
+                    },
+                  ),
                 ),
-              ),
+              if (Auth.isStaff() || Auth.isAdmin())
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: menuButton(
+                    'Medicine',
+                    'assets/images/drugs.png',
+                    () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => MedicineListPage()),
+                      );
+                    },
+                  ),
+                ),
               if (Auth.isStaff())
                 Padding(
                   padding: const EdgeInsets.all(8.0),

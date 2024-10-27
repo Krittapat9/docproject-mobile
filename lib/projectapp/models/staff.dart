@@ -10,6 +10,7 @@ class Staff {
   final String firstname;
   final String lastname;
   final int is_admin;
+  int first_login;
 
   Staff({
     required this.id,
@@ -17,6 +18,7 @@ class Staff {
     required this.firstname,
     required this.lastname,
     required this.is_admin,
+    required this.first_login,
   });
 
   factory Staff.fromJson(Map<String, dynamic> json) => _$StaffFromJson(json);
