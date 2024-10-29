@@ -96,9 +96,6 @@ class _PatientListPage extends State<PatientListPage> {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
           Expanded(
             child: FutureBuilder<List<Patient>>(
               future: getPatientList(searchBox),
@@ -131,10 +128,10 @@ class _PatientListPage extends State<PatientListPage> {
                         });
                       },
                       child: Card(
-                        elevation: 8,
+                        elevation: 5,
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
+                            borderRadius: BorderRadius.circular(7.0)),
                         margin: EdgeInsets.all(4.0),
                         child: ListTile(
                           title: Padding(
@@ -169,13 +166,6 @@ class _PatientListPage extends State<PatientListPage> {
                 );
               },
             ),
-          ),
-          Container(
-            width: double.maxFinite,
-            height: 50,
-            color: Colors.grey,
-            padding: EdgeInsets.zero,
-            margin: EdgeInsets.zero,
           ),
         ],
       ),

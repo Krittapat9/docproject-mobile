@@ -4,6 +4,7 @@ import 'package:code/projectapp/models/login_patient.dart';
 import 'package:code/projectapp/models/patient.dart';
 import 'package:code/projectapp/models/staff.dart';
 import 'package:code/projectapp/pages/home_page.dart';
+import 'package:code/projectapp/pages/patient/patient_verify_otp_page.dart';
 import 'package:code/projectapp/pages/start_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
@@ -60,14 +61,14 @@ class _LoginPatientPage extends State<LoginPatientPage> {
       }
       // success
       Fluttertoast.showToast(
-        msg: 'Login successful',
+        msg: 'valid email',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
       );
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomePage(),
+          builder: (context) => PatientVerifyOtpPage(),
         ),
       );
     } catch (e) {
@@ -145,7 +146,7 @@ class _LoginPatientPage extends State<LoginPatientPage> {
                     ),
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 50.0),
-                      backgroundColor: Colors.red[800],
+                      backgroundColor: Colors.black54,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),

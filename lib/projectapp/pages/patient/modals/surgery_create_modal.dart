@@ -47,7 +47,7 @@ class _SurgeryCreateModal extends State<SurgeryCreateModal> {
         'surgery_type_note_other': surgeryTypeNoteOtherController.text,
         'disease_id': diseaseId,
         'disease_note_other': diseaseNoteOtherController.text,
-        'date_of_surgery': dateOfSurgeryController.text,
+        'date_of_surgery': DateTime.now().toIso8601String(),
         'staff_id': Auth.currentUser?.id,
       },
     );
@@ -241,54 +241,7 @@ class _SurgeryCreateModal extends State<SurgeryCreateModal> {
                     SizedBox(
                       height: 20.0,
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: dateOfSurgeryController,
-                            //editing controller of this TextField
-                            decoration: const InputDecoration(
-                              icon: Icon(Icons.calendar_today),
-                              //icon of text field
-                              labelText: "Enter Date of Surgery", //label text of field
-                            ),
-                            readOnly: true,
-                            // when true user cannot edit text
-                            onTap: () async {
-                              final d = DateTime.now();
 
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: d.add(const Duration(days: 1)),
-                                //get today's date
-                                firstDate: DateTime.now(),
-                                //DateTime.now() - not to allow to choose before today.
-                                lastDate: d.add(const Duration(days: 90)),
-                              );
-                              if (pickedDate != null) {
-                                print(
-                                    pickedDate); //get the picked date in the format => 2022-07-04 00:00:00.000
-                                String formattedDate = DateFormat('dd / MMM / yyyy').format(
-                                    pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
-                                print(
-                                    formattedDate); //formatted date output using intl package =>  2022-07-04
-                                //You can format date as per your need
-
-                                setState(() {
-                                  dateOfSurgeryController.text =
-                                      formattedDate; //set foratted date to TextField value.
-                                });
-                              } else {
-                                print("Date is not selected");
-                              }
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30.0,
-                    ),
                     ElevatedButton(
                       onPressed: () async {
                         await _createSurgery();

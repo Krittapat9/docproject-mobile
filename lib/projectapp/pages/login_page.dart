@@ -168,7 +168,7 @@ class _LoginPage extends State<LoginPage> {
                     ),
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(double.infinity, 50.0),
-                      backgroundColor: Colors.red[800],
+                      backgroundColor: Colors.black54,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

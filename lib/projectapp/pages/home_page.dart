@@ -63,13 +63,12 @@ class _HomePage extends State<HomePage> {
 
   // String get _userId =>
   //     Auth.currentUser?.id != null ? '${Auth.currentUser!.id}' : 'Guest';
-
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Future.delayed(Duration.zero, () async {
-      if (Auth.currentUser!.is_admin == 0 &&
-          Auth.currentUser!.first_login == 0) {
+@override
+void initState() {
+  super.initState();
+  Future.delayed(Duration.zero, () async {
+    try {
+      if (Auth.currentUser!.is_admin == 0 && Auth.currentUser!.first_login == 0) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -77,9 +76,18 @@ class _HomePage extends State<HomePage> {
           ),
         );
       }
-    });
+    } catch (e) {
+      print('Navigation Error: $e');
+    }
+  });
+
+  try {
     loadAppointmentUpcoming(AuthPatient.currentUser!.id);
+  } catch (e) {
+    // handle load error here
+    print('Loading Appointment Error: $e');
   }
+}
 
   Widget menuButton(
     String label,
@@ -106,7 +114,7 @@ class _HomePage extends State<HomePage> {
             height: 60,
           ),
           SizedBox(
-            height: 8,
+            height: 4,
           ),
           Text(
             label,
@@ -116,23 +124,29 @@ class _HomePage extends State<HomePage> {
               color: Color.fromRGBO(62, 28, 168, 1.0),
             ),
           ),
-
           if (notification > 0)
-            Container(
-              width: 25,
-              height: 25,
-              child: Center(
-                child: Text(
-                  '$notification',
-                  style: TextStyle(
-                    color: Colors.white,
+            Column(
+              children: [
+                SizedBox(height: 2,),
+                Container(
+                  width: 28,
+                  height: 28,
+                  child: Center(
+                    child: Text(
+                      '$notification',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red,
                   ),
                 ),
-              ),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.red,
-              ),
+              ],
             )
         ],
       ),
@@ -269,7 +283,7 @@ class _HomePage extends State<HomePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: menuButton(
                     'Appointment',
-                    'assets/images/patient.png',
+                    'assets/images/calendar3.png',
                     () {
                       Navigator.of(context).push(
                         MaterialPageRoute(

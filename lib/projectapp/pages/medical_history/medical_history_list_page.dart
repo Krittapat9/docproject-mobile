@@ -69,9 +69,7 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
         Text(
           value,
           style: TextStyle(
-            fontSize: 15.0,
-            fontWeight: FontWeight.bold,
-          ),
+              fontSize: 15.0, fontWeight: FontWeight.bold, color: Colors.green),
         ),
       ],
     );
@@ -122,7 +120,8 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                             'วัน/เดือน/ปีเกิด',
                             surgeryMedical?.patient.date_of_birth != null
                                 ? DateFormat('dd / MMM / yyyy').format(
-                                    surgeryMedical!.surgery.date_of_surgery!)
+                                    surgeryMedical!.patient.date_of_birth!
+                                        .add(Duration(hours: 7)))
                                 : '-'),
                       ],
                     ),
@@ -165,10 +164,11 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                                     ?.toString() ??
                                 '-'),
                         InfoRow(
-                            'วัน/เดือน/ปี ที่ผ่าตัด',
+                            'วัน/เดือน/ปี ที่วินิจฉัย',
                             surgeryMedical?.surgery.date_of_surgery != null
                                 ? DateFormat('dd / MMM / yyyy').format(
-                                    surgeryMedical!.surgery.date_of_surgery!)
+                                    surgeryMedical!.surgery.date_of_surgery!
+                                        .add(Duration(hours: 7)))
                                 : '-'),
                         InfoRow('แพทย์ผู้ผ่าตัด',
                             '${surgeryMedical?.surgery.staff_firstname} ${surgeryMedical?.surgery.staff_lastname}'),
@@ -263,10 +263,12 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                                             '-'),
                                     medicalStyle(
                                       'วัน-เวลารักษา',
-                                      DateFormat('dd / MMM / yyyy | HH:MM:ss')
-                                          .format(medicalHistory
-                                                  ?.datetime_of_medical ??
-                                              DateTime.now()),
+                                      DateFormat('dd / MMM / yyyy - HH:mm')
+                                          .format(
+                                        (medicalHistory?.datetime_of_medical ??
+                                                DateTime.now())
+                                            .add(Duration(hours: 7)),
+                                      ),
                                     ),
                                   ],
                                 ),

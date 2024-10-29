@@ -198,7 +198,7 @@ class _PatientInfoPage extends State<PatientInfoPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 5),
+                  SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -206,7 +206,7 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Case ID : ',
+                              text: 'Case : ',
                               style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: 14,
@@ -223,14 +223,18 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                         ),
                       ),
                       if (Auth.isStaff())
-                      IconButton(
-                          onPressed: () async {
-                            await deleteSurgery(surgeryInfo!.id)
-                                .then((onValue) {
-                              setState(() {});
-                            });
-                          },
-                          icon: Icon(Icons.delete_forever)),
+                        IconButton(
+                            onPressed: () async {
+                              await deleteSurgery(surgeryInfo!.id)
+                                  .then((onValue) {
+                                setState(() {});
+                              });
+                            },
+                            icon: Icon(
+                              Icons.delete_forever,
+                              size: 20,
+                              color: Colors.red,
+                            )),
                     ],
                   ),
                   SizedBox(height: 8),
@@ -318,19 +322,27 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                     ),
                   ),
                   SizedBox(height: 8),
+                  // patient?.date_of_birth != null
+                  //     ? DateFormat('dd / MMM / yyyy').format(
+                  //     patient!.date_of_birth!
+                  //         .add(Duration(hours: 7)))
+                  //     : '-',
                   RichText(
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'วัน/เดือน/ปี ที่ผ่าตัด : ',
+                          text: 'วัน/เดือน/ปี ที่วินิจฉัย : ',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 14,
                               fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
-                          text: DateFormat('dd / MMM / yyyy')
-                              .format(surgeryInfo?.date_of_surgery?? DateTime.now()),
+                          text: surgeryInfo?.date_of_surgery != null
+                                ? DateFormat('dd / MMM / yyyy').format(
+                                surgeryInfo!.date_of_surgery!
+                                    .add(Duration(hours: 7)))
+                                : '-',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 14,
@@ -437,19 +449,19 @@ class _PatientInfoPage extends State<PatientInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
-        title: Text(
-          'Patient Information',
-          style: const TextStyle(
-            fontSize: 18.0,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+          backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
+          title: Text(
+            'Patient Information',
+            style: const TextStyle(
+              fontSize: 18.0,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
-          onPressed: () => Navigator.pop(context),
-        ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
+            onPressed: () => Navigator.pop(context),
+          ),
           automaticallyImplyLeading: false,
           actions: [
             Builder(
@@ -469,7 +481,6 @@ class _PatientInfoPage extends State<PatientInfoPage> {
       drawer: Drawer(
         child: Text('hello'),
       ),
-
       body: Column(
         children: [
           Expanded(
@@ -478,7 +489,7 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.only(
-                        top: 16, left: 16, right: 16, bottom: 5),
+                        top: 10, left: 16, right: 16, bottom: 10),
                     child: ListView(
                       children: [
                         Container(
@@ -498,25 +509,25 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                           fontSize: 18)),
                                   Spacer(),
                                   if (Auth.isStaff())
-                                  IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                PatientEditPage(
-                                                    patientId: patient!.id),
-                                          ),
-                                        ).then((val) {
-                                          setState(() {
-                                            print('return 2');
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PatientEditPage(
+                                                      patientId: patient!.id),
+                                            ),
+                                          ).then((val) {
+                                            setState(() {
+                                              print('return 2');
+                                            });
                                           });
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.edit,
-                                        size: 25,
-                                      ))
+                                        },
+                                        icon: Icon(
+                                          Icons.edit,
+                                          size: 25,
+                                        ))
                                 ],
                               ),
                               Divider(),
@@ -524,98 +535,44 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                   '${patient?.firstname} ${patient?.lastname}'),
                               _InfoRow('เพศ', '${patient?.sex}'),
                               _InfoRow(
-                                  'วันเดือนปีเกิด',
-                                  DateFormat('dd / MMM / yyyy').format(
-                                      patient?.date_of_birth ??
-                                          DateTime.now())),
+                                'วันเดือนปีเกิด',
+                                patient?.date_of_birth != null
+                                    ? DateFormat('dd / MMM / yyyy').format(
+                                        patient!.date_of_birth!
+                                            .add(Duration(hours: 7)))
+                                    : '-',
+                              ),
                               _InfoRow('หมายเลขโรงพยาบาล',
                                   '${patient?.hospital_number}'),
                               _InfoRow(
                                   'email', patient?.email?.toString() ?? '-'),
                               _InfoRow('ผู้ลงทะเบียน',
                                   '${patient?.staff_firstname} ${patient?.staff_lastname}'),
+                              // DateFormat('dd / MMM / yyyy - HH:mm').format(
+                              //   (medicalHistory?.datetime_of_medical ?? DateTime.now()).add(Duration(hours: 7)),
+                              // ),date_of_registration
                               _InfoRow(
                                   'วันเวลาลงทะเบียน',
-                                  DateFormat('dd / MMM / yyyy-H:MM:ss').format(
-                                      patient?.date_of_registration ??
-                                          DateTime.now())),
+                                DateFormat('dd / MMM / yyyy - HH:mm').format(
+                                     (patient?.date_of_registration ?? DateTime.now()).add(Duration(hours: 7)),
+                                   ),),
                             ],
                           ),
                         ),
                         if (Auth.isStaff())
-                        SizedBox(
-                          height: 13.0,
-                        ),
-                        if (Auth.isStaff())
-                        Container(
-                          height: 60,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (BuildContext context) {
-                                    return SurgeryCreateModal(
-                                      patientId: widget.patientId,
-                                    );
-                                  }).then((val) {
-                                setState(() {
-                                  print('return 2');
-                                });
-                              });
-                              setState(() {
-                                print('return 1');
-                              });
-
-                              // showBottomSheet(context: context,
-                              //     builder: (BuildContext context){
-                              //       return SurgeryCreatePage();
-                              //     }
-                              // );
-
-                              // Navigator.pushReplacement(
-                              //     (context),
-                              //     MaterialPageRoute(
-                              //         builder: (context) => SurgeryCreatePage()));
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              side: BorderSide(color: Colors.black),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'เพิ่มการวินิจฉัย และ การผ่าตัด',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Spacer(),
-                                Icon(
-                                  Icons.add,
-                                  size: 36,
-                                  color: Color.fromRGBO(62, 28, 162, 1.0),
-                                )
-                              ],
-                            ),
+                          SizedBox(
+                            height: 13.0,
                           ),
-                        ),
                         if (Auth.isStaff())
-                        SizedBox(
-                          height: 8,
-                        ),
-                        if (Auth.isStaff())
-                        Container(
-                          height: 45,
-                          child: ElevatedButton(
+                          Container(
+                            height: 60,
+                            child: ElevatedButton(
                               onPressed: () async {
                                 await showDialog(
                                     context: context,
                                     barrierDismissible: true,
                                     builder: (BuildContext context) {
-                                      return ScheduleCreateModal(
+                                      return SurgeryCreateModal(
                                         patientId: widget.patientId,
                                       );
                                     }).then((val) {
@@ -626,6 +583,17 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                 setState(() {
                                   print('return 1');
                                 });
+
+                                // showBottomSheet(context: context,
+                                //     builder: (BuildContext context){
+                                //       return SurgeryCreatePage();
+                                //     }
+                                // );
+
+                                // Navigator.pushReplacement(
+                                //     (context),
+                                //     MaterialPageRoute(
+                                //         builder: (context) => SurgeryCreatePage()));
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -633,12 +601,62 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                 ),
                                 side: BorderSide(color: Colors.black),
                               ),
-                              child: Text(
-                                'นัดหมาย',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
-                              )),
-                        ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'เพิ่มการวินิจฉัย และ การผ่าตัด',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Spacer(),
+                                  Icon(
+                                    Icons.add,
+                                    size: 36,
+                                    color: Color.fromRGBO(62, 28, 162, 1.0),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        if (Auth.isStaff())
+                          SizedBox(
+                            height: 8,
+                          ),
+                        if (Auth.isStaff())
+                          Container(
+                            height: 45,
+                            child: ElevatedButton(
+                                onPressed: () async {
+                                  await showDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      builder: (BuildContext context) {
+                                        return ScheduleCreateModal(
+                                          patientId: widget.patientId,
+                                        );
+                                      }).then((val) {
+                                    setState(() {
+                                      print('return 2');
+                                    });
+                                  });
+                                  setState(() {
+                                    print('return 1');
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  side: BorderSide(color: Colors.black),
+                                ),
+                                child: Text(
+                                  'นัดหมาย',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                          ),
                         SizedBox(
                           height: 13.0,
                         ),
@@ -662,19 +680,15 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                         surgery,
                                       ))
                                   .toList(),
+                            SizedBox(
+                              height: 10,
+                            )
                           ],
                         ),
                       ],
                     ),
                   );
                 }),
-          ),
-          Container(
-            width: double.maxFinite,
-            height: 50,
-            color: Colors.grey,
-            padding: EdgeInsets.zero,
-            margin: EdgeInsets.zero,
           ),
         ],
       ),

@@ -77,7 +77,7 @@ class _PatientCreatePage extends State<PatientCreatePage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('this email already used'),
+        content: Text('fail'),
       ));
       print('Exception: $e');
     }
@@ -183,7 +183,7 @@ class _PatientCreatePage extends State<PatientCreatePage> {
                       if (pickedDate != null) {
                         print(
                             pickedDate); //get the picked date in the format => 2022-07-04 00:00:00.000
-                        String formattedDate = DateFormat('dd / MMM / yyyy').format(
+                        String formattedDate = DateFormat('yyyy-MM-dd').format(
                             pickedDate); // format date in required form here we use yyyy-MM-dd that means time is removed
                         print(
                             formattedDate); //formatted date output using intl package =>  2022-07-04
