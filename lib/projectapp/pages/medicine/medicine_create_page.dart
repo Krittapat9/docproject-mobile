@@ -59,8 +59,6 @@ class _MedicineCreatePage extends State<MedicineCreatePage> {
           icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
           onPressed: () => Navigator.pop(context),
         ),
-
-
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -71,7 +69,7 @@ class _MedicineCreatePage extends State<MedicineCreatePage> {
               decoration: InputDecoration(
                 labelText: 'ชื่อยา',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -83,14 +81,13 @@ class _MedicineCreatePage extends State<MedicineCreatePage> {
               decoration: InputDecoration(
                 labelText: 'รายละเอียดยา',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
             SizedBox(
               height: 20.0,
             ),
-
             ElevatedButton(
               onPressed: () async {
                 await _createMedicine();
@@ -103,9 +100,13 @@ class _MedicineCreatePage extends State<MedicineCreatePage> {
                     fontSize: 18.0),
               ),
               style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50.0),
-                  backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
-                  textStyle: TextStyle(color: Colors.white)),
+                minimumSize: Size(double.infinity, 50.0),
+                backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
+                textStyle: TextStyle(color: Colors.white),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             )
           ],
         ),

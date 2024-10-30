@@ -7,6 +7,7 @@ import 'package:code/projectapp/pages/patient/patient_info_page.dart';
 import 'package:code/projectapp/pages/patient/patient_list_page.dart';
 import 'package:code/projectapp/pages/setting_page.dart';
 import 'package:code/projectapp/pages/staff/staff_edit_password.dart';
+import 'package:code/projectapp/pages/staff/staff_list.dart';
 import 'package:code/projectapp/pages/staff/staff_register_pager.dart';
 import 'package:code/projectapp/pages/staff_work_schedule.dart';
 import 'package:code/projectapp/sevices/auth.dart';
@@ -111,7 +112,7 @@ void initState() {
         children: [
           Image.asset(
             iconPath,
-            height: 60,
+            height: 70,
           ),
           SizedBox(
             height: 4,
@@ -294,6 +295,20 @@ void initState() {
                     notification: notificationCount,
                   ),
                 ),
+              if (Auth.isAdmin())
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: menuButton(
+                  'Staff List',
+                  'assets/images/staff.png',
+                      () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => StaffListPage()),
+                    );
+                  },
+                ),
+              ),
               if (Auth.isStaff() || Auth.isAdmin())
                 Padding(
                   padding: const EdgeInsets.all(8.0),

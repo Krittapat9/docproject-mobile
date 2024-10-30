@@ -1,52 +1,73 @@
-import 'package:code/projectapp/pages/home_page.dart';
-import 'package:code/projectapp/pages/patient/patient_list_page.dart';
-import 'package:code/projectapp/sevices/auth.dart';
+import 'package:code/projectapp/models/staff.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer';
 
-class StaffRegisterPage extends StatefulWidget {
-  StaffRegisterPage({super.key});
+class StaffEditPage extends StatefulWidget {
+  final int staffId;
+
+  StaffEditPage({super.key, required this.staffId});
 
   @override
-  State<StaffRegisterPage> createState() => _StaffRegisterPage();
+  State<StaffEditPage> createState() => _StaffEditPage();
 }
 
-class _StaffRegisterPage extends State<StaffRegisterPage> {
+class _StaffEditPage extends State<StaffEditPage> {
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
 
   void clearForm() {
-    firstnameController.text = '';
-    lastnameController.text = '';
-    usernameController.text = '';
-    passwordController.text = '';
+    firstnameController.clear();
+    lastnameController.clear();
+    usernameController.clear();
   }
 
-  Future<void> _createPatient() async {
+  Staff? staff;
+
+  Future<Staff> getStaffInfo(int id) async {
     final dio = Dio();
-    final response = await dio.post(
-      "http://10.0.2.2:3000/staff",
+    final response = await dio.get("http://10.0.2.2:3000/staff/$id");
+
+    log('data:${response.data}');
+    if (response.statusCode == 200) {
+      staff = Staff.fromJson(response.data);
+      return staff!;
+    } else {
+      throw Exception(
+          'Failed to load staff (status code: ${response.statusCode})');
+    }
+  }
+
+  Future<void> _editStaff() async {
+    final dio = Dio();
+    final response = await dio.put(
+      "http://10.0.2.2:3000/staff/${staff!.id}",
       data: {
         'firstname': firstnameController.text,
         'lastname': lastnameController.text,
-        'username': usernameController.text,
-        'password': passwordController.text,
+        'user': usernameController.text,
       },
     );
     if (response.statusCode == 200) {
-      print('Patient created successfully!');
       clearForm();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
-      );
+      Navigator.of(context).pop();
     } else {
       print('Error creating staff: ${response.data}');
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await getStaffInfo(widget.staffId);
+      firstnameController.text = staff!.firstname;
+      lastnameController.text = staff!.lastname;
+      usernameController.text = staff!.username;
+      setState(() {});
+    });
   }
 
   @override
@@ -55,16 +76,15 @@ class _StaffRegisterPage extends State<StaffRegisterPage> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
         title: const Text(
-          'Register Staff',
-          style: const TextStyle(
+          'Edit Staff',
+          style: TextStyle(
             fontSize: 18.0,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          // Color set here
+          icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -84,17 +104,20 @@ class _StaffRegisterPage extends State<StaffRegisterPage> {
             SizedBox(
               height: 20.0,
             ),
-            TextField(
-              controller: lastnameController,
-              decoration: InputDecoration(
-                labelText: 'lastname',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
+            Container(
+              child: TextField(
+                controller: lastnameController,
+                decoration: InputDecoration(
+                  labelText: 'lastname',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
                 ),
+                // maxLines: 3,
               ),
             ),
             SizedBox(
-              height: 60.0,
+              height: 55.0,
             ),
             TextField(
               controller: usernameController,
@@ -108,37 +131,24 @@ class _StaffRegisterPage extends State<StaffRegisterPage> {
             SizedBox(
               height: 20.0,
             ),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(
-                labelText: 'password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
             ElevatedButton(
               onPressed: () async {
-                await _createPatient();
+                await _editStaff();
               },
               child: Text(
-                'Register',
+                'Edit',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0),
               ),
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50.0),
-                backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
-                textStyle: TextStyle(color: Colors.white),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
+                  minimumSize: Size(double.infinity, 50.0),
+                  backgroundColor: Colors.yellow,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  textStyle: TextStyle(color: Colors.white)),
             )
           ],
         ),

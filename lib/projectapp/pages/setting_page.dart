@@ -44,16 +44,26 @@ class _SettingPage extends State<SettingPage> {
           children: [
             ElevatedButton(
               onPressed: _logout,
-              child: const Text('LOGOUT', style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18.0,
-                color: Colors.white,
-
-              ),),
-              style: ElevatedButton.styleFrom(
-                backgroundColor:Color.fromRGBO(62, 28, 168, 1.0),
-                minimumSize: const Size(150.0, 50.0),
+              child: const Text(
+                'LOGOUT',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                  color: Colors.white,
+                ),
               ),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(70.0, 55.0),
+                backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
+                textStyle: TextStyle(color: Colors.white),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              // style: ElevatedButton.styleFrom(
+              //   backgroundColor:Color.fromRGBO(62, 28, 168, 1.0),
+              //   minimumSize: const Size(150.0, 50.0),
+              // ),
             )
           ],
         ),

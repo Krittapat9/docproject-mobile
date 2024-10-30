@@ -32,7 +32,8 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
       "http://10.0.2.2:3000/appliances",
       data: {
         'type': typeController.text,
-        'name': '${brandController.text}\n${nameFlangeController.text}\n${namePouchController.text}',
+        'name':
+            '${brandController.text}\n${nameFlangeController.text}\n${namePouchController.text}',
         'brand': brandController.text,
         'name_flange': nameFlangeController.text,
         'name_pouch': namePouchController.text,
@@ -65,8 +66,6 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
           icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
           onPressed: () => Navigator.pop(context),
         ),
-
-
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -77,7 +76,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
               decoration: InputDecoration(
                 labelText: 'Type',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -89,7 +88,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
               decoration: InputDecoration(
                 labelText: 'brand',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -101,7 +100,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
               decoration: InputDecoration(
                 labelText: 'name flange',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -113,7 +112,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
               decoration: InputDecoration(
                 labelText: 'name pouch',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -125,7 +124,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
               decoration: InputDecoration(
                 labelText: 'size',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -144,9 +143,13 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
                     fontSize: 18.0),
               ),
               style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50.0),
-                  backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
-                  textStyle: TextStyle(color: Colors.white)),
+                minimumSize: Size(double.infinity, 50.0),
+                backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
+                textStyle: TextStyle(color: Colors.white),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             )
           ],
         ),

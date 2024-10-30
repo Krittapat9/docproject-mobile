@@ -339,10 +339,10 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                         ),
                         TextSpan(
                           text: surgeryInfo?.date_of_surgery != null
-                                ? DateFormat('dd / MMM / yyyy').format(
-                                surgeryInfo!.date_of_surgery!
-                                    .add(Duration(hours: 7)))
-                                : '-',
+                              ? DateFormat('dd / MMM / yyyy').format(
+                                  surgeryInfo!.date_of_surgery!
+                                      .add(Duration(hours: 7)))
+                              : '-',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 14,
@@ -374,6 +374,7 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                     ),
                   ),
                   SizedBox(height: 15),
+
                   surgeryInfo.stoma_id != null && surgeryInfo.stoma_id! > 0
                       ? Text.rich(
                           TextSpan(children: [
@@ -395,41 +396,44 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                             )
                           ]),
                         )
-                      : ElevatedButton(
-                          onPressed: () async {
-                            await showDialog(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (BuildContext context) {
-                                  return StomaCreateModal(
-                                    surgery: surgeryInfo,
-                                  );
-                                });
-                            setState(() {});
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                      : Visibility(
+                          visible: Auth.isStaff() || Auth.isAdmin(),
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              await showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return StomaCreateModal(
+                                      surgery: surgeryInfo,
+                                    );
+                                  });
+                              setState(() {});
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              side: BorderSide(color: Colors.black),
                             ),
-                            side: BorderSide(color: Colors.black),
-                          ),
-                          child: SizedBox(
-                            width: 150,
-                            child: Row(
-                              children: [
-                                Text(
-                                  'เพิ่มประเภท Stoma',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Spacer(),
-                                Icon(
-                                  Icons.add,
-                                  size: 30,
-                                  color: Color.fromRGBO(62, 28, 162, 1.0),
-                                )
-                              ],
+                            child: SizedBox(
+                              width: 150,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'เพิ่มประเภท Stoma',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Spacer(),
+                                  Icon(
+                                    Icons.add,
+                                    size: 30,
+                                    color: Color.fromRGBO(62, 28, 162, 1.0),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -552,10 +556,13 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                               //   (medicalHistory?.datetime_of_medical ?? DateTime.now()).add(Duration(hours: 7)),
                               // ),date_of_registration
                               _InfoRow(
-                                  'วันเวลาลงทะเบียน',
+                                'วันเวลาลงทะเบียน',
                                 DateFormat('dd / MMM / yyyy - HH:mm').format(
-                                     (patient?.date_of_registration ?? DateTime.now()).add(Duration(hours: 7)),
-                                   ),),
+                                  (patient?.date_of_registration ??
+                                          DateTime.now())
+                                      .add(Duration(hours: 7)),
+                                ),
+                              ),
                             ],
                           ),
                         ),

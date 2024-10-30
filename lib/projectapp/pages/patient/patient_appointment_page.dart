@@ -211,9 +211,102 @@ class _PatientAppointmentPage extends State<PatientAppointmentPage> {
                   ],
                 ),
               ),
-              ListView.builder(
-                itemCount: 1,
-                itemBuilder: (ctx, idx) => Text("$idx"),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: FutureBuilder<List<WorkSchedule>>(
+                        future: getPatientAppointmentHistory(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(child: Text('Error:${snapshot.error}'));
+                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return const Center(child: Text('No appointments'));
+                          }
+
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              final appointment = snapshot.data![index];
+                              return InkWell(
+                                onTap: () {},
+                                child: Card(
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0)),
+                                  margin: EdgeInsets.all(4.0),
+                                  child: ListTile(
+                                    title: Text(
+                                      '${appointment.patient_firstname} ${appointment.patient_lastname}',
+                                      style: const TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    subtitle: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'appointment date: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[600],
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              DateFormat('dd / MMM / yyyy').format(
+                                                  appointment.work_date
+                                                      .add(Duration(hours: 7))),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'time : ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[600],
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${appointment.start_time} - ${appointment.end_time}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.green,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    trailing: Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 24.0,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

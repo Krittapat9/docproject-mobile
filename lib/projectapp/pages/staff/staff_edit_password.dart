@@ -87,7 +87,7 @@ class _StaffEditPasswordPage extends State<StaffEditPasswordPage> {
               decoration: InputDecoration(
                 labelText: 'Old Password',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -99,7 +99,7 @@ class _StaffEditPasswordPage extends State<StaffEditPasswordPage> {
               decoration: InputDecoration(
                 labelText: 'New Password',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -111,7 +111,7 @@ class _StaffEditPasswordPage extends State<StaffEditPasswordPage> {
               decoration: InputDecoration(
                 labelText: 'Confirm New Password',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),

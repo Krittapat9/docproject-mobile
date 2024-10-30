@@ -1,6 +1,4 @@
 import 'package:code/projectapp/models/appliances.dart';
-import 'package:code/projectapp/models/patient.dart';
-import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
@@ -111,7 +109,7 @@ class _AppliancesEditPage extends State<AppliancesEditPage> {
               decoration: InputDecoration(
                 labelText: 'type',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -124,7 +122,7 @@ class _AppliancesEditPage extends State<AppliancesEditPage> {
                 decoration: InputDecoration(
                   labelText: 'name appliance set',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(6.0),
                   ),
                 ),
                 maxLines: 3,
@@ -138,7 +136,7 @@ class _AppliancesEditPage extends State<AppliancesEditPage> {
               decoration: InputDecoration(
                 labelText: 'brand',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -150,7 +148,7 @@ class _AppliancesEditPage extends State<AppliancesEditPage> {
               decoration: InputDecoration(
                 labelText: 'name flange',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -162,7 +160,7 @@ class _AppliancesEditPage extends State<AppliancesEditPage> {
               decoration: InputDecoration(
                 labelText: 'name pouch',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
@@ -174,7 +172,7 @@ class _AppliancesEditPage extends State<AppliancesEditPage> {
               decoration: InputDecoration(
                 labelText: 'size',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
               ),
             ),
