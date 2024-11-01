@@ -229,8 +229,11 @@ class _PatientEditPage extends State<PatientEditPage> {
                     fontSize: 18.0),
               ),
               style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   minimumSize: Size(double.infinity, 50.0),
-                  backgroundColor: Colors.yellow,
+                  backgroundColor: Colors.yellow[700],
                   textStyle: TextStyle(color: Colors.white)),
             )
           ],

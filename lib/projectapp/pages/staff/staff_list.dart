@@ -213,7 +213,7 @@ class _StaffListPage extends State<StaffListPage> {
                                     const EdgeInsets.symmetric(vertical: 2),
                                 child: Center(
                                   child: Text(
-                                    'username : ${staff.username}',
+                                    'email : ${staff.username}',
                                     style: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.black,
@@ -243,7 +243,7 @@ class _StaffListPage extends State<StaffListPage> {
                                           });
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.yellow,
+                                          backgroundColor: Colors.yellow[700],
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(6),

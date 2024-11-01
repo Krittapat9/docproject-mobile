@@ -127,7 +127,7 @@ class _MedicineEditPage extends State<MedicineEditPage> {
               ),
               style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50.0),
-                  backgroundColor: Colors.yellow,
+                  backgroundColor: Colors.yellow[700],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

@@ -1,4 +1,3 @@
-
 import 'package:code/projectapp/models/patient.dart';
 import 'package:code/projectapp/pages/home_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
@@ -63,89 +62,89 @@ class _StaffEditPasswordPage extends State<StaffEditPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
-        title: const Text(
-          'Edit Patient',
-          style: const TextStyle(
-            fontSize: 18.0,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(30.0),
+                child: Text(
+                  'Edit Password',
+                  style: TextStyle(
+                      fontSize: 36.0,
+                      fontWeight: FontWeight.w900,
+                      color: Color.fromRGBO(62, 28, 168, 1.0)),
+                ),
+              ),
+              TextField(
+                controller: oldPasswordController,
+                decoration: InputDecoration(
+                  labelText: 'Old Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 40.0,
+              ),
+              TextField(
+                controller: newPasswordController,
+                decoration: InputDecoration(
+                  labelText: 'New Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15.0,
+              ),
+              TextField(
+                controller: confirmPasswordController,
+                decoration: InputDecoration(
+                  labelText: 'Confirm New Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  if (newPasswordController.text ==
+                          confirmPasswordController.text &&
+                      oldPasswordController.text.isNotEmpty &&
+                      newPasswordController.text.isNotEmpty) {
+                    await _editPassword();
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: 'edit fail',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                    );
+                  }
+                },
+                child: Text(
+                  'Edit',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0),
+                ),
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    minimumSize: Size(double.infinity, 50.0),
+                    backgroundColor: Colors.yellow[700],
+                    textStyle: TextStyle(color: Colors.white)),
+              )
+            ],
           ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: oldPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Old Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            TextField(
-              controller: newPasswordController,
-              decoration: InputDecoration(
-                labelText: 'New Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            TextField(
-              controller: confirmPasswordController,
-              decoration: InputDecoration(
-                labelText: 'Confirm New Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (newPasswordController.text ==
-                        confirmPasswordController.text &&
-                    oldPasswordController.text.isNotEmpty &&
-                    newPasswordController.text.isNotEmpty) {
-                  await _editPassword();
-                } else {
-                  Fluttertoast.showToast(
-                    msg: 'edit fail',
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                  );
-                }
-              },
-              child: Text(
-                'Edit',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0),
-              ),
-              style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50.0),
-                  backgroundColor: Colors.yellow,
-                  textStyle: TextStyle(color: Colors.white)),
-            )
-          ],
         ),
       ),
     );

@@ -957,6 +957,9 @@ class _MedicalHistoryCreatePage extends State<MedicalHistoryCreatePage> {
                             fontSize: 18.0),
                       ),
                       style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           minimumSize: Size(double.infinity, 50.0),
                           backgroundColor:
                               const Color.fromRGBO(62, 28, 168, 1.0),

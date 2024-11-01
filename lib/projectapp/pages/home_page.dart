@@ -9,7 +9,7 @@ import 'package:code/projectapp/pages/setting_page.dart';
 import 'package:code/projectapp/pages/staff/staff_edit_password.dart';
 import 'package:code/projectapp/pages/staff/staff_list.dart';
 import 'package:code/projectapp/pages/staff/staff_register_pager.dart';
-import 'package:code/projectapp/pages/staff_work_schedule.dart';
+import 'package:code/projectapp/pages/staff/staff_work_schedule.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';

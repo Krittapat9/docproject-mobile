@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:code/projectapp/models/work_schedule.dart';
-import 'package:code/projectapp/pages/staff_work_schedule.dart';
+import 'package:code/projectapp/pages/staff/staff_work_schedule.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';

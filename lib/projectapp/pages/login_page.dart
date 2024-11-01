@@ -104,7 +104,7 @@ class _LoginPage extends State<LoginPage> {
               TextField(
                 controller: usernameController,
                 decoration: InputDecoration(
-                    labelText: 'username',
+                    labelText: 'email',
                     prefixIcon: Icon(Icons.person),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0))),

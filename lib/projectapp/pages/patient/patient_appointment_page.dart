@@ -289,6 +289,28 @@ class _PatientAppointmentPage extends State<PatientAppointmentPage> {
                                                 fontSize: 18,
                                               ),
                                             ),
+
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'detail : ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[600],
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              appointment.detail,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.green,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+
                                           ],
                                         ),
                                       ],

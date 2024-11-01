@@ -192,7 +192,7 @@ class _MedicineInfoPage extends State<MedicineInfoPage> {
                     },
                     style: ElevatedButton.styleFrom(
                         minimumSize: Size(double.infinity, 45.0),
-                        backgroundColor: Colors.yellow[600],
+                        backgroundColor: Colors.yellow[700],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

@@ -197,7 +197,7 @@ class _AppliancesInfoPage extends State<AppliancesInfoPage> {
                     },
                     style: ElevatedButton.styleFrom(
                         minimumSize: Size(double.infinity, 45.0),
-                        backgroundColor: Colors.yellow[600],
+                        backgroundColor: Colors.yellow[700],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

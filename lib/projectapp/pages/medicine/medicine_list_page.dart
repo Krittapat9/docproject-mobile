@@ -21,11 +21,15 @@ class _MedicineListPage extends State<MedicineListPage> {
   @override
   bool loading = false;
   List<Medicine> medicineList = [];
+  String searchBox = '';
 
-  Future<List<Medicine>> getMedicineList() async {
+  Future<List<Medicine>> getMedicineList([String query = '']) async {
     try {
       final dio = Dio();
-      final response = await dio.get("http://10.0.2.2:3000/medicine");
+      final response = await dio.get(
+        "http://10.0.2.2:3000/medicine",
+        queryParameters: {'q': query},
+      );
 
       log('data:${response.data}');
       if (response.statusCode == 200) {
@@ -33,12 +37,12 @@ class _MedicineListPage extends State<MedicineListPage> {
         medicineList = jsonList.map((json) => Medicine.fromJson(json)).toList();
         return medicineList;
       } else {
-        // throw Exception(
-        //     'Failed to load patients (status code: ${response.statusCode})');
+        throw Exception(
+            'Failed to load medicine (status code: ${response.statusCode})');
       }
     } catch (error) {
       log('err:$error');
-      // throw Exception('Error fetching patients: $error');
+      throw Exception('Error fetching medicine: $error');
     }
     return [];
   }
@@ -61,9 +65,10 @@ class _MedicineListPage extends State<MedicineListPage> {
             TextButton(
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MedicineCreatePage())).then((onValue) {
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MedicineCreatePage()))
+                      .then((onValue) {
                     setState(() {});
                   });
                 },
@@ -78,57 +83,85 @@ class _MedicineListPage extends State<MedicineListPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: FutureBuilder<List<Medicine>>(
-        future: getMedicineList(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error:${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No appliances found.'));
-          }
-
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              final medicine = snapshot.data![index];
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          MedicineInfoPage(medicineId: medicine.id),
-                    ),
-                  ).then((onValue) {
-                    setState(() {});
-                  });
-                },
-                child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                  margin: EdgeInsets.all(4.0),
-                  child: ListTile(
-                    title: Text(
-                      '${medicine.name}',
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      size: 24.0,
-                    ),
-                  ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  searchBox = value;
+                });
+                getMedicineList(searchBox);
+              },
+              decoration: InputDecoration(
+                labelText: 'Search Medicine',
+                border: OutlineInputBorder(),
+                suffixIcon: Icon(
+                  Icons.search,
+                  color: Colors.black,
                 ),
-              );
-            },
-          );
-        },
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: FutureBuilder<List<Medicine>>(
+              future: getMedicineList(searchBox),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error:${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No appliances found.'));
+                }
+
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    final medicine = snapshot.data![index];
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MedicineInfoPage(medicineId: medicine.id),
+                          ),
+                        ).then((onValue) {
+                          setState(() {});
+                        });
+                      },
+                      child: Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        margin: EdgeInsets.all(4.0),
+                        child: ListTile(
+                          title: Text(
+                            '${medicine.name}',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            size: 24.0,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

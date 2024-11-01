@@ -99,7 +99,7 @@ class _StaffRegisterPage extends State<StaffRegisterPage> {
             TextField(
               controller: usernameController,
               decoration: InputDecoration(
-                labelText: 'username',
+                labelText: 'email',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6.0),
                 ),
