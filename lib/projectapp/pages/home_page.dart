@@ -1,6 +1,7 @@
 import 'package:code/projectapp/models/work_schedule.dart';
 import 'package:code/projectapp/pages/appliances/appliances_list_page.dart';
 import 'package:code/projectapp/pages/medicine/medicine_list_page.dart';
+import 'package:code/projectapp/pages/patient/contact.dart';
 import 'package:code/projectapp/pages/patient/patient_appointment_page.dart';
 import 'package:code/projectapp/pages/patient/patient_create_page.dart';
 import 'package:code/projectapp/pages/patient/patient_info_page.dart';
@@ -189,6 +190,14 @@ void initState() {
                     color: Color.fromRGBO(255, 255, 255, 0.5),
                   ),
                 ),
+                // TextSpan(
+                //   text: Auth.currentUser.,
+                //   style: const TextStyle(
+                //     fontSize: 17.0,
+                //     fontWeight: FontWeight.bold,
+                //     color: Color.fromRGBO(255, 255, 255, 0.5),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -351,6 +360,19 @@ void initState() {
                     },
                   ),
                 ),
+              if (!Auth.isStaff() && !Auth.isAdmin())
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: menuButton(
+                  'Contact',
+                  'assets/images/contact.png',
+                      () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ContactPage()),
+                    );
+                  },
+                ),
+              ),
 
               Padding(
                 padding: const EdgeInsets.all(8.0),

@@ -16,12 +16,13 @@ class WorkSchedule {
 
   final String patient_firstname;
   final String patient_lastname;
+  final String patient_email;
 
 
 
   factory WorkSchedule.fromJson(Map<String, dynamic> json) => _$WorkScheduleFromJson(json);
 
-  WorkSchedule({required this.id, required this.staff_id, required this.patient_id, required this.work_date, required this.start_time, required this.end_time, required this.detail, required this.patient_firstname, required this.patient_lastname});
+  WorkSchedule({required this.id, required this.staff_id, required this.patient_id, required this.work_date, required this.start_time, required this.end_time, required this.detail, required this.patient_firstname, required this.patient_lastname, required this.patient_email});
 
 
 }

@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:code/projectapp/models/patient.dart';
 import 'package:code/projectapp/pages/patient/patient_info_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
 
 class PatientCreatePage extends StatefulWidget {
   PatientCreatePage({super.key});
@@ -19,6 +23,9 @@ class _PatientCreatePage extends State<PatientCreatePage> {
   TextEditingController dateOfBirthController = TextEditingController();
   TextEditingController hospitalNumberController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? pickedFile;
 
   void clearForm() {
     firstnameController.clear();
@@ -46,18 +53,22 @@ class _PatientCreatePage extends State<PatientCreatePage> {
     }
 
     try {
+      FormData formData = FormData.fromMap({
+        'staff_id': Auth.currentUser?.id,
+        'firstname': firstnameController.text,
+        'lastname': lastnameController.text,
+        'sex': sexController.text,
+        'date_of_birth': dateOfBirthController.text,
+        'hospital_number': hospitalNumberController.text,
+        'date_of_registration': DateTime.now().toIso8601String(),
+        'email': emailController.text,
+        'image': await MultipartFile.fromFile(pickedFile!.path,
+            filename: path.basename(pickedFile!.path)),
+      });
+
       final response = await dio.post(
         "http://10.0.2.2:3000/patient",
-        data: {
-          'staff_id': Auth.currentUser?.id,
-          'firstname': firstnameController.text,
-          'lastname': lastnameController.text,
-          'sex': sexController.text,
-          'date_of_birth': dateOfBirthController.text,
-          'hospital_number': hospitalNumberController.text,
-          'date_of_registration': DateTime.now().toIso8601String(),
-          'email': emailController.text,
-        },
+        data: formData,
       );
       if (response.statusCode == 200) {
         Patient patient = Patient.fromJson(response.data);
@@ -66,7 +77,8 @@ class _PatientCreatePage extends State<PatientCreatePage> {
           content: Text('Patient created successfully!'),
         ));
         clearForm();
-        Navigator.pushReplacement(context,
+        Navigator.pushReplacement(
+          context,
           MaterialPageRoute(
             builder: (context) => PatientInfoPage(patientId: patient.id),
           ),
@@ -119,6 +131,29 @@ class _PatientCreatePage extends State<PatientCreatePage> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
+            ElevatedButton(
+                onPressed: () async {
+                  pickedFile = await _picker.pickImage(
+                    source: ImageSource.gallery,
+                    maxWidth: 50,
+                    maxHeight: 50,
+                    imageQuality: 90,
+                  );
+                  setState(() {});
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  side: BorderSide(color: Colors.black),
+                ),
+                child: Text('image')),
+            pickedFile != null
+                ? Image.file(File(pickedFile!.path))
+                : SizedBox(),
+            SizedBox(
+              height: 20,
+            ),
             TextField(
               controller: firstnameController,
               decoration: InputDecoration(
@@ -240,6 +275,9 @@ class _PatientCreatePage extends State<PatientCreatePage> {
                     fontSize: 18.0),
               ),
               style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   minimumSize: Size(double.infinity, 50.0),
                   backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
                   textStyle: TextStyle(color: Colors.white)),

@@ -16,6 +16,7 @@ WorkSchedule _$WorkScheduleFromJson(Map<String, dynamic> json) => WorkSchedule(
       detail: json['detail'] as String,
       patient_firstname: json['patient_firstname'] as String,
       patient_lastname: json['patient_lastname'] as String,
+      patient_email: json['patient_email'] as String,
     );
 
 Map<String, dynamic> _$WorkScheduleToJson(WorkSchedule instance) =>
@@ -29,4 +30,5 @@ Map<String, dynamic> _$WorkScheduleToJson(WorkSchedule instance) =>
       'detail': instance.detail,
       'patient_firstname': instance.patient_firstname,
       'patient_lastname': instance.patient_lastname,
+      'patient_email': instance.patient_email,
     };

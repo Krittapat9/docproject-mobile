@@ -292,6 +292,28 @@ class _PatientAppointmentPage extends State<PatientAppointmentPage> {
 
                                           ],
                                         ),
+
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'email : ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[600],
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              appointment.patient_email,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
                                         Row(
                                           children: [
                                             Text(
@@ -315,10 +337,10 @@ class _PatientAppointmentPage extends State<PatientAppointmentPage> {
                                         ),
                                       ],
                                     ),
-                                    trailing: Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 24.0,
-                                    ),
+                                    // trailing: Icon(
+                                    //   Icons.arrow_forward_ios,
+                                    //   size: 24.0,
+                                    // ),
                                   ),
                                 ),
                               );

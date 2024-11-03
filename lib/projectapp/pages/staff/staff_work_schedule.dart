@@ -178,6 +178,46 @@ class _StaffWorkSchedule extends State<StaffWorkSchedule> {
                                           '${workSchedule.start_time} - ${workSchedule.end_time}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
+                                            color: Colors.green,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'email : ',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Text(
+                                          workSchedule.patient_email,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'detail : ',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey[600],
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Text(
+                                          workSchedule.detail,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
                                             color: Colors.black,
                                             fontSize: 16,
                                           ),
