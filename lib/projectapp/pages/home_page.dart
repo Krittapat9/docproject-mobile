@@ -209,6 +209,7 @@ void initState() {
                   icon: const Icon(
                     Icons.menu,
                     color: Colors.white,
+                    size: 30,
                   ),
                   onPressed: () {
                     Scaffold.of(context).openDrawer();
@@ -218,7 +219,142 @@ void initState() {
             ),
           ]),
       drawer: Drawer(
-        child: Text('hello'),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              height: 140,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(62, 28, 162, 1.0),
+                ),
+                child: Text(
+                  'Menu',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.home,
+                size: 25,
+              ),
+              title: Text(
+                'Home',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false,
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.person,
+                size: 25,
+              ),
+              title: Text(
+                'Patient List',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PatientListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.medical_services,
+                size: 25,
+              ),
+              title: Text(
+                'Appilanaces',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AppliancesListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.medication_liquid,
+                size: 25,
+              ),
+              title: Text(
+                'Medicine',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MedicineListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.calendar_month,
+                size: 25,
+              ),
+              title: Text(
+                'Work Schedule',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StaffWorkSchedule()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.settings,
+                size: 25,
+              ),
+              title: Text(
+                'Setting',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingPage()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: Center(
         child: Container(
@@ -292,7 +428,7 @@ void initState() {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: menuButton(
-                    'Appointment',
+                    'My Appointment',
                     'assets/images/calendar3.png',
                     () {
                       Navigator.of(context).push(

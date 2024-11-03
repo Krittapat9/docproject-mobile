@@ -74,10 +74,10 @@ class _ContactPage extends State<ContactPage> {
                   Divider(),
                   _InfoRow(
                       'เบอร์ติดต่อ','095-781-3390'),
-                  _InfoRow('วันเปิดทำการ', 'จันทร์-ศุกร์'),
+                  _InfoRow('วันเปิดทำการ', 'Mon-Fri'),
                   _InfoRow('เวลาทำการ', '8.00-16.00'),
-                  _InfoRow('ที่ตั้ง', 'โรงพยาบาล'),
-                  _InfoRow('อีเมล', 'ostomy505@hotmail.com'),
+                  _InfoRow('ที่ตั้ง', 'Hospital'),
+                  _InfoRow('email', 'ostomy505@hotmail.com'),
                 ],
               ),
             ),

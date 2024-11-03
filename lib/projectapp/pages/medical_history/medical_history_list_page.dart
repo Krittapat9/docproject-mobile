@@ -3,8 +3,13 @@ import 'package:code/projectapp/models/medical_history.dart';
 import 'package:code/projectapp/models/surgery.dart';
 import 'package:code/projectapp/models/surgery_medical_history.dart';
 import 'package:code/projectapp/pages/appliances/appliances_list_page.dart';
+import 'package:code/projectapp/pages/home_page.dart';
 import 'package:code/projectapp/pages/medical_history/medical_history_create_page.dart';
 import 'package:code/projectapp/pages/medical_history/medical_history_info_page.dart';
+import 'package:code/projectapp/pages/medicine/medicine_list_page.dart';
+import 'package:code/projectapp/pages/patient/patient_list_page.dart';
+import 'package:code/projectapp/pages/setting_page.dart';
+import 'package:code/projectapp/pages/staff/staff_work_schedule.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -90,6 +95,161 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
           onPressed: () => Navigator.pop(context),
+        ),
+          automaticallyImplyLeading: false,
+          actions: [
+            Builder(
+              builder: (context) {
+                return IconButton(
+                  icon: const Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                );
+              },
+            ),
+          ]
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              height: 140,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(62, 28, 162, 1.0),
+                ),
+                child: Text(
+                  'Menu',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.home,
+                size: 25,
+              ),
+              title: Text(
+                'Home',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false,
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.person,
+                size: 25,
+              ),
+              title: Text(
+                'Patient List',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PatientListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.medical_services,
+                size: 25,
+              ),
+              title: Text(
+                'Appilanaces',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AppliancesListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.medication_liquid,
+                size: 25,
+              ),
+              title: Text(
+                'Medicine',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MedicineListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.calendar_month,
+                size: 25,
+              ),
+              title: Text(
+                'Work Schedule',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StaffWorkSchedule()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.settings,
+                size: 25,
+              ),
+              title: Text(
+                'Setting',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingPage()),
+                );
+              },
+            ),
+          ],
         ),
       ),
       body: FutureBuilder(

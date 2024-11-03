@@ -1,12 +1,17 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:code/projectapp/models/surgery.dart';
+import 'package:code/projectapp/models/work_schedule.dart';
 import 'package:code/projectapp/pages/appliances/appliances_list_page.dart';
+import 'package:code/projectapp/pages/home_page.dart';
 import 'package:code/projectapp/pages/medical_history/medical_history_list_page.dart';
+import 'package:code/projectapp/pages/medicine/medicine_list_page.dart';
 import 'package:code/projectapp/pages/patient/modals/schedule_create_modal.dart';
 import 'package:code/projectapp/pages/patient/modals/stoma_create_modal.dart';
 import 'package:code/projectapp/pages/patient/modals/surgery_create_modal.dart';
 import 'package:code/projectapp/pages/patient/patient_edit_page.dart';
+import 'package:code/projectapp/pages/patient/patient_list_page.dart';
+import 'package:code/projectapp/pages/setting_page.dart';
+import 'package:code/projectapp/pages/staff/staff_work_schedule.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +35,7 @@ class _PatientInfoPage extends State<PatientInfoPage> {
   Patient? patient;
 
   List<Surgery> surgeryList = [];
+  List<WorkSchedule> appointmentList = [];
 
   Future<Patient> getPatientInfo(int id) async {
     final dio = Dio();
@@ -73,6 +79,29 @@ class _PatientInfoPage extends State<PatientInfoPage> {
       log(e.toString());
     }
     return true;
+  }
+
+  Future<List<WorkSchedule>> getPatientAppointment() async {
+    try {
+      final dio = Dio();
+      log('Appointment List: $appointmentList');
+      final response = await dio.get(
+          "http://10.0.2.2:3000/appointment/patient/${AuthPatient.currentUser!.id}");
+
+      log('data:${response.data}');
+      if (response.statusCode == 200) {
+        List jsonList = response.data;
+        appointmentList =
+            jsonList.map((json) => WorkSchedule.fromJson(json)).toList();
+        return appointmentList;
+      } else {
+        throw Exception(
+            'Failed to load patients (status code: ${response.statusCode})');
+      }
+    } catch (error) {
+      log('err:$error');
+    }
+    return [];
   }
 
   Future<bool> deleteSurgery(int surgeryId) async {
@@ -463,7 +492,7 @@ class _PatientInfoPage extends State<PatientInfoPage> {
             ),
           ),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white), // Color set here
+            icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
           automaticallyImplyLeading: false,
@@ -474,6 +503,7 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                   icon: const Icon(
                     Icons.menu,
                     color: Colors.white,
+                    size: 30,
                   ),
                   onPressed: () {
                     Scaffold.of(context).openDrawer();
@@ -483,7 +513,142 @@ class _PatientInfoPage extends State<PatientInfoPage> {
             ),
           ]),
       drawer: Drawer(
-        child: Text('hello'),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              height: 140,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(62, 28, 162, 1.0),
+                ),
+                child: Text(
+                  'Menu',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.home,
+                size: 25,
+              ),
+              title: Text(
+                'Home',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                  (Route<dynamic> route) => false,
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.person,
+                size: 25,
+              ),
+              title: Text(
+                'Patient List',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PatientListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.medical_services,
+                size: 25,
+              ),
+              title: Text(
+                'Appilanaces',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AppliancesListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.medication_liquid,
+                size: 25,
+              ),
+              title: Text(
+                'Medicine',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MedicineListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.calendar_month,
+                size: 25,
+              ),
+              title: Text(
+                'Work Schedule',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StaffWorkSchedule()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.settings,
+                size: 25,
+              ),
+              title: Text(
+                'Setting',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingPage()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [

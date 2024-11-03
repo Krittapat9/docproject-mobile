@@ -24,6 +24,8 @@ class _PatientCreatePage extends State<PatientCreatePage> {
   TextEditingController hospitalNumberController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
+  String? selectedSex;
+
   final ImagePicker _picker = ImagePicker();
   XFile? pickedFile;
 
@@ -135,8 +137,6 @@ class _PatientCreatePage extends State<PatientCreatePage> {
                 onPressed: () async {
                   pickedFile = await _picker.pickImage(
                     source: ImageSource.gallery,
-                    maxWidth: 50,
-                    maxHeight: 50,
                     imageQuality: 90,
                   );
                   setState(() {});
@@ -147,12 +147,31 @@ class _PatientCreatePage extends State<PatientCreatePage> {
                   ),
                   side: BorderSide(color: Colors.black),
                 ),
-                child: Text('image')),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('image'),
+                    Icon(Icons.add)
+                    
+                  ],
+                )),
             pickedFile != null
-                ? Image.file(File(pickedFile!.path))
-                : SizedBox(),
+                ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.file(
+                      File(pickedFile!.path),
+                      width: 180,
+                      height: 180,
+                      fit: BoxFit.cover,
+                    ),
+                )
+                : SizedBox(
+                    width: 100, // กำหนดขนาดที่ต้องการแม้ยังไม่มีรูป
+                    height: 100,
+                    child: Icon(Icons.image, size: 70, color: Colors.grey),
+                  ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
             TextField(
               controller: firstnameController,
@@ -178,8 +197,40 @@ class _PatientCreatePage extends State<PatientCreatePage> {
             SizedBox(
               height: 20.0,
             ),
-            TextField(
-              controller: sexController,
+            // TextField(
+            //   controller: sexController,
+            //   decoration: InputDecoration(
+            //     labelText: 'sex',
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(10.0),
+            //     ),
+            //   ),
+            // ),
+            DropdownButtonFormField<String>(
+              value: selectedSex,
+              items: [
+                DropdownMenuItem<String>(
+                  value: null,
+                  child: Text(
+                    'Please select',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'Male',
+                  child: Text('Male'),
+                ),
+                DropdownMenuItem<String>(
+                  value: 'Female',
+                  child: Text('Female'),
+                ),
+              ],
+              onChanged: (newValue) {
+                setState(() {
+                  selectedSex = newValue;
+                  sexController.text = newValue ?? ''; // กำหนดค่าให้ controller
+                });
+              },
               decoration: InputDecoration(
                 labelText: 'sex',
                 border: OutlineInputBorder(
@@ -187,6 +238,7 @@ class _PatientCreatePage extends State<PatientCreatePage> {
                 ),
               ),
             ),
+
             SizedBox(
               height: 20.0,
             ),

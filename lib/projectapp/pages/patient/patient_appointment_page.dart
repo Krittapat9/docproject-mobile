@@ -99,7 +99,7 @@ class _PatientAppointmentPage extends State<PatientAppointmentPage> {
               ],
             ),
             title: const Text(
-              'Appointment',
+              'My Appointment',
               style: TextStyle(
                 fontSize: 20.0,
                 color: Colors.white,
@@ -194,10 +194,49 @@ class _PatientAppointmentPage extends State<PatientAppointmentPage> {
                                             ),
                                           ],
                                         ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'email: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[600],
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(appointment.patient_email,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'detail: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey[600],
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(appointment.detail,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                     trailing: Icon(
-                                      Icons.arrow_forward_ios,
+                                      Icons.circle,
+                                      color: Colors.green,
                                       size: 24.0,
                                     ),
                                   ),
@@ -285,7 +324,7 @@ class _PatientAppointmentPage extends State<PatientAppointmentPage> {
                                               '${appointment.start_time} - ${appointment.end_time}',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.green,
+                                                color: Colors.blue,
                                                 fontSize: 18,
                                               ),
                                             ),
@@ -337,10 +376,11 @@ class _PatientAppointmentPage extends State<PatientAppointmentPage> {
                                         ),
                                       ],
                                     ),
-                                    // trailing: Icon(
-                                    //   Icons.arrow_forward_ios,
-                                    //   size: 24.0,
-                                    // ),
+                                    trailing: Icon(
+                                      Icons.circle,
+                                      color: Colors.blue,
+                                      size: 24.0,
+                                    ),
                                   ),
                                 ),
                               );
