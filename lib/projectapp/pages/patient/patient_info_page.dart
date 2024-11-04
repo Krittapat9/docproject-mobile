@@ -89,8 +89,8 @@ class _PatientInfoPage extends State<PatientInfoPage> {
     try {
       final dio = Dio();
       log('Appointment List: $appointmentList');
-      final response = await dio.get(
-          "http://10.0.2.2:3000/appointment/patient/${patient!.id}");
+      final response = await dio
+          .get("http://10.0.2.2:3000/appointment/patient/${patient!.id}");
 
       log('data:${response.data}');
       if (response.statusCode == 200) {
@@ -815,7 +815,16 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                               ),
                               Divider(),
                               patient?.image_patient != null
-                                  ? Image.network('${patient?.image_patient}')
+                                  ? Center(
+                                      child: ClipOval(
+                                        child: Image.network(
+                                          '${patient?.image_patient}',
+                                          width: 120,
+                                          height: 120,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    )
                                   : SizedBox(),
                               // _InfoRow('รูป', '${patient?.image_patient}'),
                               _InfoRow('ชื่อ-นามสกุล',
@@ -956,15 +965,27 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                         SizedBox(
                           height: 13.0,
                         ),
+                        Divider(),
+                        Center(
+                            child: Text(
+                          'การนัดหมาย',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15),
+                        )),
+                        Divider(),
                         FutureBuilder<List<WorkSchedule>>(
                           future: getPatientAppointment(),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
                               return Center(child: CircularProgressIndicator());
                             } else if (snapshot.hasError) {
-                              return Center(child: Text('Error:${snapshot.error}'));
-                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                              return const Center(child: Text('No appointments'));
+                              return Center(
+                                  child: Text('Error:${snapshot.error}'));
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return const Center(
+                                  child: Text('No appointments'));
                             }
 
                             return Container(
@@ -978,7 +999,8 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                     child: Card(
                                       elevation: 4,
                                       shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(5.0)),
+                                          borderRadius:
+                                              BorderRadius.circular(5.0)),
                                       margin: EdgeInsets.all(4.0),
                                       child: ListTile(
                                         subtitle: Column(
@@ -994,9 +1016,11 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  DateFormat('dd / MMM / yyyy').format(
-                                                      appointment.work_date
-                                                          .add(Duration(hours: 7))),
+                                                  DateFormat('dd / MMM / yyyy')
+                                                      .format(appointment
+                                                          .work_date
+                                                          .add(Duration(
+                                                              hours: 7))),
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.black,
@@ -1025,7 +1049,6 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                                 ),
                                               ],
                                             ),
-
                                           ],
                                         ),
                                         trailing: Icon(
@@ -1041,10 +1064,13 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                             );
                           },
                         ),
+                        Divider(),
                         Center(
-                          child: Text('ข้อมูลการวินิจฉัยโรคและการผ่าตัด',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                          child: Text(
+                            'ข้อมูลการวินิจฉัยโรคและการผ่าตัด',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 15),
+                          ),
                         ),
                         Divider(),
                         Column(
