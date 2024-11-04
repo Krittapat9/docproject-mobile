@@ -299,7 +299,7 @@ class _MedicalHistoryCreatePage extends State<MedicalHistoryCreatePage> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
         title: const Text(
-          'Add Medical',
+          'Create Medical',
           style: const TextStyle(
             fontSize: 18.0,
             color: Colors.white,
@@ -325,10 +325,15 @@ class _MedicalHistoryCreatePage extends State<MedicalHistoryCreatePage> {
                 child: Column(
                   children: [
                     Center(
-                      child: Text('เพิ่มการรักษา',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800, fontSize: 19)),
+                      child: Text(
+                        'เพิ่มการรักษา',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0),
+                      ),
                     ),
+
                     SizedBox(
                       height: 10.0,
                     ),
@@ -893,8 +898,8 @@ class _MedicalHistoryCreatePage extends State<MedicalHistoryCreatePage> {
                                 showSearchBox: true,
                                 onFind: (find) async => await medicineList
                                     .where((e) => e.name
-                                    .toLowerCase()
-                                    .contains(find.toLowerCase()))
+                                        .toLowerCase()
+                                        .contains(find.toLowerCase()))
                                     .toList(),
                                 selectedValue: medicine,
                                 itemBuilder: ((context, item, selected) {

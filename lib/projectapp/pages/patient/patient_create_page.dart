@@ -117,7 +117,7 @@ class _PatientCreatePage extends State<PatientCreatePage> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
         title: const Text(
-          'Add Patient',
+          'Create Patient',
           style: const TextStyle(
             fontSize: 18.0,
             color: Colors.white,
@@ -133,6 +133,16 @@ class _PatientCreatePage extends State<PatientCreatePage> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
+            Text(
+              'Create Patient',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22.0),
+            ),
+            SizedBox(
+              height: 15,
+            ),
             ElevatedButton(
                 onPressed: () async {
                   pickedFile = await _picker.pickImage(
@@ -149,22 +159,18 @@ class _PatientCreatePage extends State<PatientCreatePage> {
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('image'),
-                    Icon(Icons.add)
-                    
-                  ],
+                  children: [Text('image'), Icon(Icons.add)],
                 )),
             pickedFile != null
                 ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.file(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.file(
                       File(pickedFile!.path),
                       width: 180,
                       height: 180,
                       fit: BoxFit.cover,
                     ),
-                )
+                  )
                 : SizedBox(
                     width: 100, // กำหนดขนาดที่ต้องการแม้ยังไม่มีรูป
                     height: 100,

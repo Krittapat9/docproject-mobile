@@ -55,7 +55,7 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
         title: const Text(
-          'Add Appliances',
+          'Create Appliances',
           style: const TextStyle(
             fontSize: 18.0,
             color: Colors.white,
@@ -71,6 +71,16 @@ class _AppliancesCreatePage extends State<AppliancesCreatePage> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
+            Text(
+              'Create Appliances',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22.0),
+            ),
+            SizedBox(
+              height: 15,
+            ),
             TextField(
               controller: typeController,
               decoration: InputDecoration(

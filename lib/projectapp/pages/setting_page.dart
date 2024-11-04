@@ -1,3 +1,5 @@
+import 'package:code/projectapp/pages/staff/staff_edit_page.dart';
+import 'package:code/projectapp/pages/staff/staff_edit_password.dart';
 import 'package:code/projectapp/pages/start_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:flutter/material.dart';
@@ -42,10 +44,16 @@ class _SettingPage extends State<SettingPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (Auth.isStaff())
             ElevatedButton(
-              onPressed: _logout,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StaffEditPasswordPage()));
+              },
               child: const Text(
-                'LOGOUT',
+                'Edit password',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0,
@@ -64,7 +72,33 @@ class _SettingPage extends State<SettingPage> {
               //   backgroundColor:Color.fromRGBO(62, 28, 168, 1.0),
               //   minimumSize: const Size(150.0, 50.0),
               // ),
-            )
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              onPressed: _logout,
+              child: const Text(
+                'logout',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                  color: Colors.white,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(70.0, 55.0),
+                backgroundColor: const Color.fromRGBO(62, 28, 168, 1.0),
+                textStyle: TextStyle(color: Colors.white),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              // style: ElevatedButton.styleFrom(
+              //   backgroundColor:Color.fromRGBO(62, 28, 168, 1.0),
+              //   minimumSize: const Size(150.0, 50.0),
+              // ),
+            ),
           ],
         ),
       ),

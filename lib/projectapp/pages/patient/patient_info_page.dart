@@ -5,12 +5,16 @@ import 'package:code/projectapp/pages/appliances/appliances_list_page.dart';
 import 'package:code/projectapp/pages/home_page.dart';
 import 'package:code/projectapp/pages/medical_history/medical_history_list_page.dart';
 import 'package:code/projectapp/pages/medicine/medicine_list_page.dart';
+import 'package:code/projectapp/pages/patient/contact.dart';
 import 'package:code/projectapp/pages/patient/modals/schedule_create_modal.dart';
 import 'package:code/projectapp/pages/patient/modals/stoma_create_modal.dart';
 import 'package:code/projectapp/pages/patient/modals/surgery_create_modal.dart';
+import 'package:code/projectapp/pages/patient/patient_appointment_page.dart';
 import 'package:code/projectapp/pages/patient/patient_edit_page.dart';
 import 'package:code/projectapp/pages/patient/patient_list_page.dart';
 import 'package:code/projectapp/pages/setting_page.dart';
+import 'package:code/projectapp/pages/staff/staff_list.dart';
+import 'package:code/projectapp/pages/staff/staff_register_pager.dart';
 import 'package:code/projectapp/pages/staff/staff_work_schedule.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
@@ -86,7 +90,7 @@ class _PatientInfoPage extends State<PatientInfoPage> {
       final dio = Dio();
       log('Appointment List: $appointmentList');
       final response = await dio.get(
-          "http://10.0.2.2:3000/appointment/patient/${AuthPatient.currentUser!.id}");
+          "http://10.0.2.2:3000/appointment/patient/${patient!.id}");
 
       log('data:${response.data}');
       if (response.statusCode == 200) {
@@ -552,82 +556,192 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                 );
               },
             ),
-            ListTile(
-              leading: Icon(
-                Icons.person,
-                size: 25,
-              ),
-              title: Text(
-                'Patient List',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
+            if (Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.add,
+                  size: 25,
                 ),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PatientListPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.medical_services,
-                size: 25,
-              ),
-              title: Text(
-                'Appilanaces',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
+                title: Text(
+                  'Register Staff',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StaffRegisterPage()),
+                  );
+                },
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AppliancesListPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.medication_liquid,
-                size: 25,
-              ),
-              title: Text(
-                'Medicine',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
+            if (Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.person,
+                  size: 25,
                 ),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MedicineListPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.calendar_month,
-                size: 25,
-              ),
-              title: Text(
-                'Work Schedule',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
+                title: Text(
+                  'Staff List',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => StaffListPage()),
+                  );
+                },
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => StaffWorkSchedule()),
-                );
-              },
-            ),
+            if (!Auth.isStaff() && !Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.person,
+                  size: 25,
+                ),
+                title: Text(
+                  'My Infomation',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PatientInfoPage(
+                            patientId: AuthPatient.currentUser!.id)),
+                  );
+                },
+              ),
+            if (!Auth.isStaff() && !Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.calendar_month,
+                  size: 25,
+                ),
+                title: Text(
+                  'My Appointment',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PatientAppointmentPage()),
+                  );
+                },
+              ),
+            if (!Auth.isStaff() && !Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.phone,
+                  size: 25,
+                ),
+                title: Text(
+                  'Contact',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ContactPage()),
+                  );
+                },
+              ),
+            if (Auth.isStaff())
+              ListTile(
+                leading: Icon(
+                  Icons.person,
+                  size: 25,
+                ),
+                title: Text(
+                  'Patient List',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PatientListPage()),
+                  );
+                },
+              ),
+            if (Auth.isStaff() || Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.medical_services,
+                  size: 25,
+                ),
+                title: Text(
+                  'Appilanaces',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AppliancesListPage()),
+                  );
+                },
+              ),
+            if (Auth.isStaff() || Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.medication_liquid,
+                  size: 25,
+                ),
+                title: Text(
+                  'Medicine',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MedicineListPage()),
+                  );
+                },
+              ),
+            if (Auth.isStaff())
+              ListTile(
+                leading: Icon(
+                  Icons.calendar_month,
+                  size: 25,
+                ),
+                title: Text(
+                  'Work Schedule',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StaffWorkSchedule()),
+                  );
+                },
+              ),
             ListTile(
               leading: Icon(
                 Icons.settings,
@@ -700,6 +814,10 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                 ],
                               ),
                               Divider(),
+                              patient?.image_patient != null
+                                  ? Image.network('${patient?.image_patient}')
+                                  : SizedBox(),
+                              // _InfoRow('รูป', '${patient?.image_patient}'),
                               _InfoRow('ชื่อ-นามสกุล',
                                   '${patient?.firstname} ${patient?.lastname}'),
                               _InfoRow('เพศ', '${patient?.sex}'),
@@ -709,6 +827,12 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                                     ? DateFormat('dd / MMM / yyyy').format(
                                         patient!.date_of_birth!
                                             .add(Duration(hours: 7)))
+                                    : '-',
+                              ),
+                              _InfoRow(
+                                'อายุ',
+                                patient?.date_of_birth != null
+                                    ? '${DateTime.now().year - patient!.date_of_birth!.year} ปี'
                                     : '-',
                               ),
                               _InfoRow('หมายเลขโรงพยาบาล',
@@ -831,6 +955,91 @@ class _PatientInfoPage extends State<PatientInfoPage> {
                           ),
                         SizedBox(
                           height: 13.0,
+                        ),
+                        FutureBuilder<List<WorkSchedule>>(
+                          future: getPatientAppointment(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Center(child: Text('Error:${snapshot.error}'));
+                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                              return const Center(child: Text('No appointments'));
+                            }
+
+                            return Container(
+                              height: 200,
+                              child: ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (context, index) {
+                                  final appointment = snapshot.data![index];
+                                  return InkWell(
+                                    onTap: () {},
+                                    child: Card(
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5.0)),
+                                      margin: EdgeInsets.all(4.0),
+                                      child: ListTile(
+                                        subtitle: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'appointment date: ',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.grey[600],
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  DateFormat('dd / MMM / yyyy').format(
+                                                      appointment.work_date
+                                                          .add(Duration(hours: 7))),
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  'time : ',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.grey[600],
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${appointment.start_time} - ${appointment.end_time}',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.green,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+
+                                          ],
+                                        ),
+                                        trailing: Icon(
+                                          Icons.circle,
+                                          color: Colors.green,
+                                          size: 24.0,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
                         ),
                         Center(
                           child: Text('ข้อมูลการวินิจฉัยโรคและการผ่าตัด',

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:code/projectapp/models/staff.dart';
 import 'package:code/projectapp/pages/home_page.dart';
+import 'package:code/projectapp/pages/staff/staff_forget_password.dart';
 import 'package:code/projectapp/pages/start_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
@@ -171,6 +172,25 @@ class _LoginPage extends State<LoginPage> {
                       backgroundColor: Colors.black54,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 2,),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StaffForgetPasswordPage(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Forget Password',
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
                       ),
                     ),
                   ),

@@ -72,6 +72,16 @@ class _StaffRegisterPage extends State<StaffRegisterPage> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
+            Text(
+              'Register Staff',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22.0),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             TextField(
               controller: firstnameController,
               decoration: InputDecoration(

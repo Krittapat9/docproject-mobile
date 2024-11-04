@@ -65,31 +65,32 @@ class _HomePage extends State<HomePage> {
 
   // String get _userId =>
   //     Auth.currentUser?.id != null ? '${Auth.currentUser!.id}' : 'Guest';
-@override
-void initState() {
-  super.initState();
-  Future.delayed(Duration.zero, () async {
-    try {
-      if (Auth.currentUser!.is_admin == 0 && Auth.currentUser!.first_login == 0) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StaffEditPasswordPage(),
-          ),
-        );
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      try {
+        if (Auth.currentUser!.is_admin == 0 &&
+            Auth.currentUser!.first_login == 0) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => StaffEditPasswordPage(),
+            ),
+          );
+        }
+      } catch (e) {
+        print('Navigation Error: $e');
       }
-    } catch (e) {
-      print('Navigation Error: $e');
-    }
-  });
+    });
 
-  try {
-    loadAppointmentUpcoming(AuthPatient.currentUser!.id);
-  } catch (e) {
-    // handle load error here
-    print('Loading Appointment Error: $e');
+    try {
+      loadAppointmentUpcoming(AuthPatient.currentUser!.id);
+    } catch (e) {
+      // handle load error here
+      print('Loading Appointment Error: $e');
+    }
   }
-}
 
   Widget menuButton(
     String label,
@@ -129,7 +130,9 @@ void initState() {
           if (notification > 0)
             Column(
               children: [
-                SizedBox(height: 2,),
+                SizedBox(
+                  height: 2,
+                ),
                 Container(
                   width: 28,
                   height: 28,
@@ -254,17 +257,39 @@ void initState() {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => HomePage()),
-                      (Route<dynamic> route) => false,
+                  (Route<dynamic> route) => false,
                 );
               },
             ),
+            if (Auth.isAdmin())
+            ListTile(
+              leading: Icon(
+                Icons.add,
+                size: 25,
+              ),
+              title: Text(
+                'Register Staff',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => StaffRegisterPage()),
+                );
+              },
+            ),
+            if (Auth.isAdmin())
             ListTile(
               leading: Icon(
                 Icons.person,
                 size: 25,
               ),
               title: Text(
-                'Patient List',
+                'Staff List',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -273,55 +298,41 @@ void initState() {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PatientListPage()),
+                  MaterialPageRoute(
+                      builder: (context) => StaffListPage()),
                 );
               },
             ),
-            ListTile(
-              leading: Icon(
-                Icons.medical_services,
-                size: 25,
-              ),
-              title: Text(
-                'Appilanaces',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
+            if (!Auth.isStaff() && !Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.person,
+                  size: 25,
                 ),
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AppliancesListPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.medication_liquid,
-                size: 25,
-              ),
-              title: Text(
-                'Medicine',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
+                title: Text(
+                  'My Infomation',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PatientInfoPage(
+                            patientId: AuthPatient.currentUser!.id)),
+                  );
+                },
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MedicineListPage()),
-                );
-              },
-            ),
+            if (!Auth.isStaff() && !Auth.isAdmin())
             ListTile(
               leading: Icon(
                 Icons.calendar_month,
                 size: 25,
               ),
               title: Text(
-                'Work Schedule',
+                'My Appointment',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -330,10 +341,112 @@ void initState() {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => StaffWorkSchedule()),
+                  MaterialPageRoute(builder: (context) => PatientAppointmentPage()),
                 );
               },
             ),
+            if (!Auth.isStaff() && !Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.phone,
+                  size: 25,
+                ),
+                title: Text(
+                  'Contact',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ContactPage()),
+                  );
+                },
+              ),
+            if (Auth.isStaff())
+              ListTile(
+                leading: Icon(
+                  Icons.person,
+                  size: 25,
+                ),
+                title: Text(
+                  'Patient List',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PatientListPage()),
+                  );
+                },
+              ),
+            if (Auth.isStaff() || Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.medical_services,
+                  size: 25,
+                ),
+                title: Text(
+                  'Appilanaces',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AppliancesListPage()),
+                  );
+                },
+              ),
+            if (Auth.isStaff() || Auth.isAdmin())
+              ListTile(
+                leading: Icon(
+                  Icons.medication_liquid,
+                  size: 25,
+                ),
+                title: Text(
+                  'Medicine',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MedicineListPage()),
+                  );
+                },
+              ),
+            if (Auth.isStaff())
+              ListTile(
+                leading: Icon(
+                  Icons.calendar_month,
+                  size: 25,
+                ),
+                title: Text(
+                  'Work Schedule',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StaffWorkSchedule()),
+                  );
+                },
+              ),
             ListTile(
               leading: Icon(
                 Icons.settings,
@@ -441,19 +554,19 @@ void initState() {
                   ),
                 ),
               if (Auth.isAdmin())
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: menuButton(
-                  'Staff List',
-                  'assets/images/staff.png',
-                      () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => StaffListPage()),
-                    );
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: menuButton(
+                    'Staff List',
+                    'assets/images/staff.png',
+                    () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => StaffListPage()),
+                      );
+                    },
+                  ),
                 ),
-              ),
               if (Auth.isStaff() || Auth.isAdmin())
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -497,18 +610,18 @@ void initState() {
                   ),
                 ),
               if (!Auth.isStaff() && !Auth.isAdmin())
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: menuButton(
-                  'Contact',
-                  'assets/images/contact.png',
-                      () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ContactPage()),
-                    );
-                  },
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: menuButton(
+                    'Contact',
+                    'assets/images/contact.png',
+                    () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => ContactPage()),
+                      );
+                    },
+                  ),
                 ),
-              ),
 
               Padding(
                 padding: const EdgeInsets.all(8.0),

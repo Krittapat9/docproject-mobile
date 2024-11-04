@@ -1,4 +1,3 @@
-import 'package:code/projectapp/models/patient.dart';
 import 'package:code/projectapp/pages/home_page.dart';
 import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
@@ -142,7 +141,27 @@ class _StaffEditPasswordPage extends State<StaffEditPasswordPage> {
                     minimumSize: Size(double.infinity, 50.0),
                     backgroundColor: Colors.yellow[700],
                     textStyle: TextStyle(color: Colors.white)),
-              )
+              ),
+              SizedBox(height: 10,),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Back',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0),
+                ),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(double.infinity, 50.0),
+                  backgroundColor: Colors.black54,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

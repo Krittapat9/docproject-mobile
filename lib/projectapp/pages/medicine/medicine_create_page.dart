@@ -48,7 +48,7 @@ class _MedicineCreatePage extends State<MedicineCreatePage> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(62, 28, 162, 1.0),
         title: const Text(
-          'Add Medicine',
+          'Create Medicine',
           style: const TextStyle(
             fontSize: 18.0,
             color: Colors.white,
@@ -64,6 +64,16 @@ class _MedicineCreatePage extends State<MedicineCreatePage> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
+            Text(
+              'Create Medicine',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22.0),
+            ),
+            SizedBox(
+              height: 15,
+            ),
             TextField(
               controller: nameController,
               decoration: InputDecoration(

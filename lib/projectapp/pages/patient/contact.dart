@@ -76,7 +76,7 @@ class _ContactPage extends State<ContactPage> {
                       'เบอร์ติดต่อ','095-781-3390'),
                   _InfoRow('วันเปิดทำการ', 'Mon-Fri'),
                   _InfoRow('เวลาทำการ', '8.00-16.00'),
-                  _InfoRow('ที่ตั้ง', 'Hospital'),
+                  _InfoRow('ที่ตั้ง', 'Hospital9'),
                   _InfoRow('email', 'ostomy505@hotmail.com'),
                 ],
               ),
