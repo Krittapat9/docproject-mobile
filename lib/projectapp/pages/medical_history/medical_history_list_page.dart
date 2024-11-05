@@ -19,6 +19,7 @@ import 'package:code/projectapp/sevices/auth.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:code/projectapp/pages/report/report.dart'; // นำเข้าหน้า ReportScreen
 
 class MedicalHistoryListPage extends StatefulWidget {
   final int surgeryId;
@@ -46,6 +47,20 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
       throw Exception(
           'Failed to load patients (status code: ${response.statusCode})');
     }
+  }
+
+  void report() {
+    log("Report button clicked");
+    // Navigating to ReportScreen with the surgeryId
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReportScreen(surgeryId: widget.surgeryId), // ส่ง surgeryId ไปที่ ReportScreen
+      ),
+    ).then((_) {
+      // อัปเดตหน้าหลังจากกลับจาก ReportScreen
+      setState(() {});
+    });
   }
 
   @override
@@ -513,6 +528,32 @@ class _MedicalHistoryListPage extends State<MedicalHistoryListPage> {
                         ),
                       ),
                     ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: report,
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        side: BorderSide(color: Colors.black),
+                        backgroundColor: Colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Report',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          ),
+                          SizedBox(width: 5),
+                        ],
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: 10,
                   ),
